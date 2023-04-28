@@ -77,7 +77,10 @@ class Template(QWidget):
             filename, _ = QFileDialog.getOpenFileName(self, 'Select Photo', QDir.currentPath(), "Images (*.png *.jpg *.jpeg)")
             if not filename:
                 return
-        self.grid.removeWidget(self.title);
+            info = QFileInfo(filename)
+            if(info.size() > 5242880):
+                return
+        self.grid.removeWidget(self.title)
         pixmap = QPixmap(filename)
         self.photo.setPixmap(pixmap)
     
