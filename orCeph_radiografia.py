@@ -79,6 +79,12 @@ class Template(QWidget):
                 return
             info = QFileInfo(filename)
             if(info.size() > 5242880):
+                alert = QMessageBox()
+                alert.setIcon(QMessageBox.Information)
+                alert.setText("Your image is greater than 5MB")
+                alert.setWindowTitle("Alert")
+                alert.setStandardButtons(QMessageBox.Ok)
+                alert.exec_()
                 return
         self.grid.removeWidget(self.title)
         pixmap = QPixmap(filename)
