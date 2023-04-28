@@ -1,24 +1,28 @@
 import sys
 
-from PyQt5.QtWidgets import QApplication, QMainWindow
+from PyQt5 import QtWidgets, QtGui
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 from PyQt5.QtGui import QPainter, QPen
 from PyQt5.QtCore import Qt
 from orCeph_demo2 import Ui_DibujoPunto
 
 class Aplicacion(QMainWindow):
-    def __init__(self):
+    def __init__(self, width, height):
         super().__init__()
+        
+        self.inicializar_gui(width, height)
 
-        self.inicializar_gui()
-
-    def inicializar_gui(self):
+    def inicializar_gui(self, width, height):
+        print(width, height)
         self.ui = Ui_DibujoPunto()
-        self.ui.setupUi(self)
-
+        self.ui.setupUi(self, width, height)
         self.posicion_1 = [0, 0]
         self.posicion_2 = [0, 0]
 
         self.show()
+    
     
     def mousePressEvent(self, event):
         if event.buttons() & Qt.LeftButton:
@@ -46,7 +50,7 @@ def main():
     desktop = app.desktop()
     size_screen = desktop.screenGeometry()
     print(size_screen.width(), size_screen.height())
-    ventana = Aplicacion()
+    ventana = Aplicacion(size_screen.width(), size_screen.height())
 
     sys.exit(app.exec_())
 

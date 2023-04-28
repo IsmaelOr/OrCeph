@@ -12,10 +12,12 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 
 
 class Ui_DibujoPunto(object):
-    def setupUi(self, DibujoPunto):
+    def setupUi(self, DibujoPunto, width, height):
         DibujoPunto.setObjectName("DibujoPunto")
         # DibujoPunto.resize(973, 733)
-        DibujoPunto.showMaximized()
+        # DibujoPunto.showMaximized()
+        DibujoPunto.setFixedSize(width, height - 70)
+        DibujoPunto.move(0,0)
         # DibujoPunto.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.centralwidget = QtWidgets.QWidget(DibujoPunto)
         self.centralwidget.setObjectName("centralwidget")
@@ -36,7 +38,7 @@ class Ui_DibujoPunto(object):
         self.label_2.setFont(font)
         self.label_2.setObjectName("label_2")
         self.widget_2 = QtWidgets.QWidget(self.centralwidget)
-        self.widget_2.setGeometry(QtCore.QRect(680, 110, 280, 38))
+        self.widget_2.setGeometry(QtCore.QRect(width - 300, 110, 280, 38))
         self.widget_2.setObjectName("widget_2")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget_2)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -54,7 +56,7 @@ class Ui_DibujoPunto(object):
         self.comboBox.addItem("")
         self.horizontalLayout.addWidget(self.comboBox)
         self.widget_3 = QtWidgets.QWidget(self.centralwidget)
-        self.widget_3.setGeometry(QtCore.QRect(680, 160, 281, 511))
+        self.widget_3.setGeometry(QtCore.QRect(width - 300, 160, 281, 511))
         self.widget_3.setObjectName("widget_3")
         self.label_3 = QtWidgets.QLabel(self.widget_3)
         self.label_3.setGeometry(QtCore.QRect(10, 20, 261, 16))
