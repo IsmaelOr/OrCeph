@@ -43,6 +43,9 @@ class Aplicacion(QMainWindow):
 
 def main():
     app = QApplication(sys.argv)
+    desktop = app.desktop()
+    size_screen = desktop.screenGeometry()
+    print(size_screen.width(), size_screen.height())
     ventana = Aplicacion()
 
     sys.exit(app.exec_())

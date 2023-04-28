@@ -14,8 +14,9 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_DibujoPunto(object):
     def setupUi(self, DibujoPunto):
         DibujoPunto.setObjectName("DibujoPunto")
-        DibujoPunto.resize(973, 733)
-        DibujoPunto.setMaximumSize(QtCore.QSize(16777215, 16777215))
+        # DibujoPunto.resize(973, 733)
+        DibujoPunto.showMaximized()
+        # DibujoPunto.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.centralwidget = QtWidgets.QWidget(DibujoPunto)
         self.centralwidget.setObjectName("centralwidget")
         self.lbl_indicacion = QtWidgets.QLabel(self.centralwidget)
