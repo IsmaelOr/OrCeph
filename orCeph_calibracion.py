@@ -6,7 +6,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtGui import QPainter, QPen
 from PyQt5.QtCore import Qt
-from orCeph_demo2 import Ui_DibujoPunto
+from orCeph_interfaz import Ui_MainWindow
 
 class Aplicacion(QMainWindow):
     def __init__(self, width, height):
@@ -16,7 +16,7 @@ class Aplicacion(QMainWindow):
 
     def inicializar_gui(self, width, height):
         print(width, height)
-        self.ui = Ui_DibujoPunto()
+        self.ui = Ui_MainWindow()
         self.ui.setupUi(self, width, height)
         self.posicion_1 = [0, 0]
         self.posicion_2 = [0, 0]
