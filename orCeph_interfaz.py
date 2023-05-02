@@ -9,7 +9,10 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import sys
+from PyQt5.QtWidgets import *
+from PyQt5.QtCore import *
+from PyQt5.QtGui import *
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow, width, height):
@@ -59,13 +62,15 @@ class Ui_MainWindow(object):
         self.btn_calcular = QtWidgets.QPushButton(self.centralwidget)
         self.btn_calcular.setGeometry(QtCore.QRect(width - 290, 900, 261, 41))
         self.btn_calcular.setObjectName("btn_calcular")
-        self.imagen = QtWidgets.QLabel(self.centralwidget)
-        self.imagen.setGeometry(QtCore.QRect(30, 150, width-400, height-250))
-        self.imagen.setObjectName("imagen")
-        self.imagen.setStyleSheet('''
-        QLabel {
-            border: 4px dashed #aaa;
-        }''')
+        self.photo = PhotoLabel(self.centralwidget)
+        self.photo.setGeometry(QtCore.QRect(30, 150, width-400, height-250))
+        # self.imagen = QtWidgets.QLabel(self.centralwidget)
+        # self.imagen.setGeometry(QtCore.QRect(30, 150, width-400, height-250))
+        # self.imagen.setObjectName("imagen")
+        # self.imagen.setStyleSheet('''
+        # QLabel {
+        #     border: 4px dashed #aaa;
+        # }''')
         self.btn_mas = QtWidgets.QPushButton(self.centralwidget)
         self.btn_mas.setGeometry(QtCore.QRect(width-350, height-580, 41, 23))
         self.btn_mas.setObjectName("btn_mas")
@@ -130,7 +135,7 @@ class Ui_MainWindow(object):
         self.select_unidad.setItemText(2, _translate("MainWindow", "in"))
         self.lbl_lista.setText(_translate("MainWindow", "Lista de Puntos de Steiner:"))
         self.btn_calcular.setText(_translate("MainWindow", "Calcular"))
-        self.imagen.setText(_translate("MainWindow", "Imagen"))
+        #self.imagen.setText(_translate("MainWindow", "Imagen"))
         self.btn_mas.setText(_translate("MainWindow", "+"))
         self.btn_menos.setText(_translate("MainWindow", "-"))
         self.lbl_zoom.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">Zoom</p></body></html>"))
@@ -138,3 +143,25 @@ class Ui_MainWindow(object):
         self.lbl_indicacion.setText(_translate("MainWindow", "Coloque dos puntos de los cuales conozca la distancia entre ellos:"))
         self.lbl_radiografia.setText(_translate("MainWindow", "Ingrese la radiografía: "))
         self.btn_buscar.setText(_translate("MainWindow", "Buscar Imagen"))
+
+class PhotoLabel(QLabel):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.setAlignment(Qt.AlignCenter)
+        self.posicion = [0,0]
+        self.setText('\n\n Drop Image Here \n\n')
+        self.setStyleSheet('''
+        QLabel {
+            border: 4px dashed #aaa;
+        }''')
+
+
+    def setPixmap(self, *args, **kwargs):
+        pixmap = QPixmap(*args, **kwargs)
+
+        super().setPixmap(pixmap)
+        self.setStyleSheet('''
+        QLabel {
+            border: none;
+        }''')

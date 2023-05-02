@@ -86,7 +86,6 @@ class Template(QWidget):
                 alert.setStandardButtons(QMessageBox.Ok)
                 alert.exec_()
                 return
-        self.grid.removeWidget(self.title)
         pixmap = QPixmap(filename)
         self.photo.setPixmap(pixmap)
     

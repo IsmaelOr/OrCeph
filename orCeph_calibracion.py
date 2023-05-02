@@ -18,6 +18,10 @@ class Aplicacion(QMainWindow):
         print(width, height)
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self, width, height)
+        
+        self.ui.btn_buscar.clicked.connect(self.open_image)
+        
+
         self.posicion_1 = [0, 0]
         self.posicion_2 = [0, 0]
 
@@ -44,6 +48,25 @@ class Aplicacion(QMainWindow):
         painter.drawLine(self.posicion_1[0], self.posicion_1[1], self.posicion_2[0], self.posicion_2[1])
 
         painter.end()
+    
+    
+    def open_image(self, filename=None):
+        if not filename:
+            filename, _ = QFileDialog.getOpenFileName(self, 'Select Photo', QDir.currentPath(), "Images (*.png *.jpg *.jpeg)")
+            if not filename:
+                return
+            info = QFileInfo(filename)
+            if(info.size() > 5242880):
+                alert = QMessageBox()
+                alert.setIcon(QMessageBox.Information)
+                alert.setText("Your image is greater than 5MB")
+                alert.setWindowTitle("Alert")
+                alert.setStandardButtons(QMessageBox.Ok)
+                alert.exec_()
+                return
+        pixmap = QPixmap(filename)
+        self.ui.photo.setPixmap(pixmap)        
+
 
 def main():
     app = QApplication(sys.argv)
