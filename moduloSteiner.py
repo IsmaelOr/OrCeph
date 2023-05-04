@@ -98,10 +98,36 @@ def calcularPlanos():
             planos['NA'] = distancia
             planosContador  += 1
 
+            if('IIS' in puntosSteiner):
+                m1, b1 = encontrarEcuacion(puntosSteiner['N'],puntosSteiner['A'])
+                m2, b2 = encontrarPerpendicular(m1,b1, puntosSteiner['IIS'])
+                x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
+                P = (x, y)
+                distancia = calcularDistancia(P, puntosSteiner['IIS'])
+                planos['IIS-NA'] = distancia
+                planosContador  += 1
+
         if('B' in puntosSteiner):
             distancia = calcularDistancia(puntosSteiner['N'], puntosSteiner['B'])
             planos['NB'] = distancia
             planosContador  += 1
+            if('III' in puntosSteiner):
+                m1, b1 = encontrarEcuacion(puntosSteiner['N'],puntosSteiner['B'])
+                m2, b2 = encontrarPerpendicular(m1,b1, puntosSteiner['III'])
+                x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
+                P = (x, y)
+                distancia = calcularDistancia(P, puntosSteiner['III'])
+                planos['III-NB'] = distancia
+                planosContador  += 1
+
+            if('Pg' in puntosSteiner):
+                m1, b1 = encontrarEcuacion(puntosSteiner['N'],puntosSteiner['B'])
+                m2, b2 = encontrarPerpendicular(m1,b1, puntosSteiner['Pg'])
+                x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
+                P = (x, y)
+                distancia = calcularDistancia(P, puntosSteiner['Pg'])
+                planos['Pg-NB'] = distancia
+                planosContador  += 1
 
         if('D' in puntosSteiner):
             distancia = calcularDistancia(puntosSteiner['N'], puntosSteiner['D'])
@@ -117,7 +143,7 @@ def calcularPlanos():
             distancia = calcularDistancia(puntosSteiner['N'], puntosSteiner['Gn'])
             planos['N-Gn'] = distancia
             planosContador  += 1
-
+        
     if('S' in puntosSteiner):
         if('N' in puntosSteiner):
             m1, b1 = encontrarEcuacion(puntosSteiner['S'],puntosSteiner['N'])
@@ -136,7 +162,7 @@ def calcularPlanos():
                 distancia = calcularDistancia(E, puntosSteiner['S'])
                 planos['Silla-E'] = distancia
                 planosContador  += 1
-
+    
     if('III' in puntosSteiner):
         if('AII' in puntosSteiner):
             distancia = calcularDistancia(puntosSteiner['III'], puntosSteiner['AII'])
@@ -161,14 +187,35 @@ def calcularPlanos():
             planosContador  += 1
     
     if('Pg\'' in puntosSteiner):
-        if('Sn\'' in puntosSteiner):
-            distancia = calcularDistancia(puntosSteiner['Pg\''], puntosSteiner['Sn\''])
+        if('Prn' in puntosSteiner):
+            distancia = calcularDistancia(puntosSteiner['Pg\''], puntosSteiner['Prn'])
             planos['Linea S'] = distancia
             planosContador  += 1
+            if('LS' in puntosSteiner):
+                m1, b1 = encontrarEcuacion(puntosSteiner['Pg\''],puntosSteiner['Prn'])
+                m2, b2 = encontrarPerpendicular(m1,b1, puntosSteiner['LS'])
+                x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
+                P = (x, y)
+                distancia = calcularDistancia(P, puntosSteiner['LS'])
+                planos['(Pg\' - Prn) - LS'] = distancia
+                planosContador  += 1
 
-    print(planos)
-    print(len(planos))
-    print(planosContador)
+            if('LS' in puntosSteiner):
+                m1, b1 = encontrarEcuacion(puntosSteiner['Pg\''],puntosSteiner['Prn'])
+                m2, b2 = encontrarPerpendicular(m1,b1, puntosSteiner['LI'])
+                x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
+                P = (x, y)
+                distancia = calcularDistancia(P, puntosSteiner['LI'])
+                planos['(Pg\' - Prn) - LI'] = distancia
+                planosContador  += 1
+
+    
+ 
+
+
+    #print(planos)
+    #print(len(planos))
+    #print(planosContador)
 
 #Pruebas
 #print(calcularDistancia(puntosPrueba['1'],puntosPrueba['2']))
@@ -180,5 +227,6 @@ def calcularPlanos():
 #print(m2, b2)
 
 #print(encontrarPuntoInterseccion(3,-4,m2, b2))
+
 
 calcularPlanos()
