@@ -19,6 +19,19 @@ def encontrarPuntoInterseccion(m1, b1, m2, b2):
     y = m1 * x + b1
     return x, y
 
+def  calcularAngulo(AB, BC, CA):
+    numerador = (math.pow(CA, 2) + math.pow(AB, 2) - math.pow(BC,2))
+    denominador = 2 * CA * AB
+    division = numerador/denominador
+    radianes = math.acos(division)
+    return radianes * (180)/math.pi
+
+def pruebaAngulo():
+    AB = calcularDistancia(puntosPrueba['P1A'], puntosPrueba["P2A"])
+    BC = calcularDistancia(puntosPrueba['P2A'], puntosPrueba["P3A"])
+    CA = calcularDistancia(puntosPrueba['P3A'], puntosPrueba["P1A"])
+    print(calcularAngulo(AB,BC,CA))
+
 # Diccionarios puntos
 puntosSteiner = {
     'S':(21,32),
@@ -70,7 +83,11 @@ puntosPrueba = {
 
     'P1':(5,2),
     'P2':(3,6),
-    'P3':(3,5)
+    'P3':(3,5),
+
+    "P1A":(-3,1),
+    "P2A":(2,5),
+    "P3A":(-1,-2)
 }
 
 def calcularPlanos():
@@ -209,10 +226,6 @@ def calcularPlanos():
                 planos['(Pg\' - Prn) - LI'] = distancia
                 planosContador  += 1
 
-    
- 
-
-
     #print(planos)
     #print(len(planos))
     #print(planosContador)
@@ -228,5 +241,5 @@ def calcularPlanos():
 
 #print(encontrarPuntoInterseccion(3,-4,m2, b2))
 
-
+#pruebaAngulo()
 calcularPlanos()
