@@ -14,6 +14,50 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
+puntosSteiner = {
+    'S':(21,32),
+    'N':(15,12),
+    'N\'':(13,12),
+    'Or':(13,11),
+    'Pr': None,
+    'A':(32,64),
+    'A\'':(17,13),
+    'B':(43,54),
+    'B\'':(15,65),
+    'D':(13,67),
+    'Pg':(54,14),
+    'Pg\'':(24,76),
+    'Me':(83,4),
+    'Me\'':(19,12),
+    'Gn': None,
+    'Gn\'':(19,12),
+    'Go':(83,4),
+    'Go\'':(19,12),
+    'III':(54,4),
+    'AII':(83,4),
+    'IIS':(83,4),
+    'AIS':(19,12),
+    'OMI':(83,4),
+    'OMS':(83,4),
+    'St':(83,4),
+    'LS':(83,4),
+    'LI':(83,4),
+    'ENP':(83,4),
+    'ENA':(83,4),
+    'Ar':(83,4),
+    'Prn':(83,4),
+    'Ba':(83,4),
+    'Po':(83,4),
+    'Pt':(83,4),
+    'Co':(83,4),
+    'G':(83,4),
+    'G\'':(83,4),
+    'Sn':(83,4),
+    'Sn\'':(83,4),
+    'Tm':(83,4),
+    'Tr': None
+}
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow, width, height):
         MainWindow.setObjectName("MainWindow")
@@ -56,14 +100,57 @@ class Ui_MainWindow(object):
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
-        self.listView = QtWidgets.QListView(self.widget_3)
-        self.listView.setGeometry(QtCore.QRect(10, 40, 261, height - 400))
-        self.listView.setObjectName("listView")
+
+        ### SCROLL BAR
+        self.formLayout = QFormLayout()
+        self.groupBox = QGroupBox("Selecciona un punto:")
+        self.labelList = []
+        self.buttonList = []
+        i = 0
+        for k,v in puntosSteiner.items():
+            self.labelList.append(QLabel(f"{k}:"))
+            if v != None:
+                self.buttonList.append(QPushButton(f"{v}"))
+            else:
+                self.buttonList.append(QPushButton("Colocar Punto"))
+            self.formLayout.addRow(self.labelList[i], self.buttonList[i])
+            i = i + 1
+
+        self.groupBox.setLayout(self.formLayout)
+        self.scroll = QScrollArea()
+        self.scroll.setWidget(self.groupBox)
+        self.scroll.setWidgetResizable(True)
+        self.scroll.setFixedHeight(height-450)
+
+        self.layout = QVBoxLayout()
+        self.layout.addWidget(self.scroll)
+
+        self.widget_3.setLayout(self.layout)
+
+
+
         self.btn_calcular = QtWidgets.QPushButton(self.centralwidget)
         self.btn_calcular.setGeometry(QtCore.QRect(width - 290, 900, 261, 41))
         self.btn_calcular.setObjectName("btn_calcular")
-        self.photo = PhotoLabel(self.centralwidget)
-        self.photo.setGeometry(QtCore.QRect(30, 150, width-400, height-250))
+
+        self.widget_5 = QtWidgets.QWidget(self.centralwidget)
+        self.widget_5.setGeometry(QtCore.QRect(-5, 0, 1700, 1080))
+        self.widget_5.setObjectName("widget_5")
+
+        self.photo = PhotoLabel(self.widget_5)
+        self.photo.setObjectName("photo")
+        self.photo.setFixedSize(1591, 891)
+
+        self.scroll2 = QScrollArea()
+        self.scroll2.setWidget(self.photo)
+        self.scroll2.setWidgetResizable(True)
+        self.scroll2.setFixedSize(1610,900)
+        self.scroll2.setStyleSheet("border: none;")
+        
+        self.layout2 = QVBoxLayout()
+        self.layout2.addWidget(self.scroll2)
+        self.widget_5.setLayout(self.layout2)
+
         # self.imagen = QtWidgets.QLabel(self.centralwidget)
         # self.imagen.setGeometry(QtCore.QRect(30, 150, width-400, height-250))
         # self.imagen.setObjectName("imagen")
@@ -71,15 +158,21 @@ class Ui_MainWindow(object):
         # QLabel {
         #     border: 4px dashed #aaa;
         # }''')
-        self.btn_mas = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_mas.setGeometry(QtCore.QRect(width-350, height-580, 41, 23))
-        self.btn_mas.setObjectName("btn_mas")
-        self.btn_menos = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_menos.setGeometry(QtCore.QRect(width-350, height-550, 41, 23))
-        self.btn_menos.setObjectName("btn_menos")
-        self.lbl_zoom = QtWidgets.QLabel(self.centralwidget)
-        self.lbl_zoom.setGeometry(QtCore.QRect(width-350, height-600, 41, 16))
-        self.lbl_zoom.setObjectName("lbl_zoom")
+
+        ### BOTONES ZOOM 
+
+        # self.btn_mas = QtWidgets.QPushButton(self.centralwidget)
+        # self.btn_mas.setGeometry(QtCore.QRect(width-350, height-580, 41, 23))
+        # self.btn_mas.setObjectName("btn_mas")
+        # self.btn_menos = QtWidgets.QPushButton(self.centralwidget)
+        # self.btn_menos.setGeometry(QtCore.QRect(width-350, height-550, 41, 23))
+        # self.btn_menos.setObjectName("btn_menos")
+        # self.lbl_zoom = QtWidgets.QLabel(self.centralwidget)
+        # self.lbl_zoom.setGeometry(QtCore.QRect(width-350, height-600, 41, 16))
+        # self.lbl_zoom.setObjectName("lbl_zoom")
+
+        ####### 
+
         self.widget = QtWidgets.QWidget(self.centralwidget)
         self.widget.setGeometry(QtCore.QRect(30, 20, 536, 60))
         self.widget.setObjectName("widget")
@@ -103,7 +196,7 @@ class Ui_MainWindow(object):
         self.lbl_indicacion.setObjectName("lbl_indicacion")
         self.verticalLayout.addWidget(self.lbl_indicacion)
         self.widget1 = QtWidgets.QWidget(self.centralwidget)
-        self.widget1.setGeometry(QtCore.QRect(30, 90, 281, 25))
+        self.widget1.setGeometry(QtCore.QRect(width-300, 70, 281, 25))
         self.widget1.setObjectName("widget1")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget1)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -136,9 +229,9 @@ class Ui_MainWindow(object):
         self.lbl_lista.setText(_translate("MainWindow", "Lista de Puntos de Steiner:"))
         self.btn_calcular.setText(_translate("MainWindow", "Calcular"))
         #self.imagen.setText(_translate("MainWindow", "Imagen"))
-        self.btn_mas.setText(_translate("MainWindow", "+"))
-        self.btn_menos.setText(_translate("MainWindow", "-"))
-        self.lbl_zoom.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">Zoom</p></body></html>"))
+        # self.btn_mas.setText(_translate("MainWindow", "+"))
+        # self.btn_menos.setText(_translate("MainWindow", "-"))
+        # self.lbl_zoom.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">Zoom</p></body></html>"))
         self.lbl_titulo.setText(_translate("MainWindow", "¡Bienvenido a OrCeph!"))
         self.lbl_indicacion.setText(_translate("MainWindow", "Coloque dos puntos de los cuales conozca la distancia entre ellos:"))
         self.lbl_radiografia.setText(_translate("MainWindow", "Ingrese la radiografía: "))
@@ -159,8 +252,13 @@ class PhotoLabel(QLabel):
 
     def setPixmap(self, *args, **kwargs):
         pixmap = QPixmap(*args, **kwargs)
-
+        qp = QPainter(pixmap)
+        pen = QPen(Qt.red, 3)
+        qp.setPen(pen)
+        qp.drawLine(0,0,0,10)
+        qp.end()
         super().setPixmap(pixmap)
+        super().setScaledContents(True)
         self.setStyleSheet('''
         QLabel {
             border: none;

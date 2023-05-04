@@ -56,6 +56,11 @@ class Aplicacion(QMainWindow):
             if not filename:
                 return
             info = QFileInfo(filename)
+            image_info = QImageReader(filename)
+            medidas = image_info.size()
+            width = medidas.width()
+            height = medidas.height()
+            print(width, height);
             if(info.size() > 5242880):
                 alert = QMessageBox()
                 alert.setIcon(QMessageBox.Information)
@@ -65,7 +70,12 @@ class Aplicacion(QMainWindow):
                 alert.exec_()
                 return
         pixmap = QPixmap(filename)
-        self.ui.photo.setPixmap(pixmap)        
+        self.ui.photo.setPixmap(pixmap)
+        self.ui.scroll2.setStyleSheet("")
+        self.ui.scroll2.setStyleSheet("border: 1px solid black;")
+        self.ui.photo.setFixedSize(1590, int(height * (1590 / width)))
+
+
 
 
 def main():
