@@ -214,16 +214,37 @@ def calcularPlanos():
                 planosContador  += 1
 
     print(planos)
-    print(len(planos))
-    print(planosContador)
+    #print(len(planos))
+    #print(planosContador)
 
 def calcularAngulos():
+    angulosContador = 0
     if('SN' in planos):
         if('NA' in planos):
-            if('S' in puntos):
-                distanciaSA = calcularDistancia(puntos['A'], puntos['S'])
-                # El punto de steiner N será el punto A de la función
-                angulos['SNA'] = calcularAngulo(planos['SN'], distanciaSA, planos['NA'])
+            distanciaSA = calcularDistancia(puntos['A'], puntos['S'])
+            # El punto de steiner N será el punto A de la función
+            angulos['SNA'] = calcularAngulo(planos['SN'], distanciaSA, planos['NA'])
+            angulosContador += 1
+        if('NB' in planos):
+            distanciaSB = calcularDistancia(puntos['B'], puntos['S'])
+            # El punto de steiner N será el punto A de la función
+            angulos['SNB'] = calcularAngulo(planos['SN'], distanciaSB, planos['NB'])
+            angulosContador += 1
+        if('ND' in planos):
+            distanciaSD = calcularDistancia(puntos['D'], puntos['S'])
+            # El punto de steiner N será el punto A de la función
+            angulos['SNB'] = calcularAngulo(planos['SN'], distanciaSD, planos['ND'])
+            angulosContador += 1
+    if('NA' in planos):
+        if('NB' in planos):
+            distanciaAB = calcularDistancia(puntos['A'], puntos['B'])
+            # El punto de steiner N será el punto A de la función
+            angulos['ANB'] = calcularAngulo(planos['NA'], distanciaAB, planos['NB'])
+            angulosContador += 1
+    print(angulosContador)
+
+        
+
 
 
 #Pruebas
@@ -242,3 +263,4 @@ def calcularAngulos():
 
 
 calcularPlanos()
+calcularAngulos()
