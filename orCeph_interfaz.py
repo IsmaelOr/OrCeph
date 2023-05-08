@@ -14,52 +14,52 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 
-puntosSteiner = {
-    'S':(21,32),
-    'N':(15,12),
-    'N\'':(13,12),
-    'Or':(13,11),
-    'Pr': None,
-    'A':(32,64),
-    'A\'':(17,13),
-    'B':(43,54),
-    'B\'':(15,65),
-    'D':(13,67),
-    'Pg':(54,14),
-    'Pg\'':(24,76),
-    'Me':(83,4),
-    'Me\'':(19,12),
-    'Gn': None,
-    'Gn\'':(19,12),
-    'Go':(83,4),
-    'Go\'':(19,12),
-    'III':(54,4),
-    'AII':(83,4),
-    'IIS':(83,4),
-    'AIS':(19,12),
-    'OMI':(83,4),
-    'OMS':(83,4),
-    'St':(83,4),
-    'LS':(83,4),
-    'LI':(83,4),
-    'ENP':(83,4),
-    'ENA':(83,4),
-    'Ar':(83,4),
-    'Prn':(83,4),
-    'Ba':(83,4),
-    'Po':(83,4),
-    'Pt':(83,4),
-    'Co':(83,4),
-    'G':(83,4),
-    'G\'':(83,4),
-    'Sn':(83,4),
-    'Sn\'':(83,4),
-    'Tm':(83,4),
-    'Tr': None
-}
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow, width, height):
+        self.puntosSteiner = {
+            'S':(21,32),
+            'N':(15,12),
+            'N\'':(13,12),
+            'Or':(13,11),
+            'Pr': None,
+            'A':(32,64),
+            'A\'':(17,13),
+            'B':(43,54),
+            'B\'':(15,65),
+            'D':(13,67),
+            'Pg':(54,14),
+            'Pg\'':(24,76),
+            'Me':(83,4),
+            'Me\'':(19,12),
+            'Gn': None,
+            'Gn\'':(19,12),
+            'Go':(83,4),
+            'Go\'':(19,12),
+            'III':(54,4),
+            'AII':(83,4),
+            'IIS':(83,4),
+            'AIS':(19,12),
+            'OMI':(83,4),
+            'OMS':(83,4),
+            'St':(83,4),
+            'LS':(83,4),
+            'LI':(83,4),
+            'ENP':(83,4),
+            'ENA':(83,4),
+            'Ar':(83,4),
+            'Prn':(83,4),
+            'Ba':(83,4),
+            'Po':(83,4),
+            'Pt':(83,4),
+            'Co':(83,4),
+            'G':(83,4),
+            'G\'':(83,4),
+            'Sn':(83,4),
+            'Sn\'':(83,4),
+            'Tm':(83,4),
+            'Tr': None
+        }
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(width, height - 70)
         MainWindow.move(0,0)
@@ -107,7 +107,7 @@ class Ui_MainWindow(object):
         self.labelList = []
         self.buttonList = []
         i = 0
-        for k,v in puntosSteiner.items():
+        for k,v in self.puntosSteiner.items():
             self.labelList.append(QLabel(f"{k}:"))
             if v != None:
                 self.buttonList.append(QPushButton(f"{v}"))
@@ -243,6 +243,10 @@ class PhotoLabel(QLabel):
         super().__init__(*args, **kwargs)
         self.setAlignment(Qt.AlignCenter)
         self.posicion = [0,0]
+        self.pixmap = None
+        self.qp = None
+        self.pen = None
+        self.punto = ""
         self.setText('\n\n Drop Image Here \n\n')
         self.setStyleSheet('''
         QLabel {
@@ -251,15 +255,42 @@ class PhotoLabel(QLabel):
 
 
     def setPixmap(self, *args, **kwargs):
-        pixmap = QPixmap(*args, **kwargs)
-        qp = QPainter(pixmap)
-        pen = QPen(Qt.red, 3)
-        qp.setPen(pen)
-        qp.drawLine(0,0,0,10)
-        qp.end()
-        super().setPixmap(pixmap)
+        self.pixmap = QPixmap(*args, **kwargs)
+        #qp = QPainter(pixmap)
+        #pen = QPen(Qt.white, 5)
+        #qp.setPen(pen)
+        # self.point = QPoint(200+10,200-5)
+        # self.qp.drawPoint(0,0);
+        # self.qp.drawText(self.point, "S")
+        # self.qp.end()
+        super().setPixmap(self.pixmap)
         super().setScaledContents(True)
         self.setStyleSheet('''
         QLabel {
             border: none;
         }''')
+
+    def setPoint(self, texto):
+        if(self.pixmap != None):
+            self.punto = texto
+            # qp.drawPoint(self.posicion[0],self.posicion[1])
+            # qp.drawText(self.posicion[0]+10,self.posicion[1]-5, texto)
+            # super().setPixmap(self.pixmap)
+            # print("Fin del punto")
+
+    def mousePressEvent(self, event):
+        if(event.buttons() & Qt.LeftButton):
+            self.posicion[0] = event.pos().x()
+            self.posicion[1] = event.pos().y()
+            print(self.posicion)
+            self.update()
+            if(self.punto != "" and self.punto != "S"):
+                print("Punto seleccionado")
+                self.qp = QPainter(self.pixmap)
+                self.pen = QPen(Qt.white, 9)
+                self.qp.setPen(self.pen)
+                print(self.posicion)
+                self.qp.drawPoint(self.posicion[0],self.posicion[1])
+                self.qp.drawText(self.posicion[0]+10,self.posicion[1]-5, self.punto)
+                self.qp.end()
+                super().setPixmap(self.pixmap)

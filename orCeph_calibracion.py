@@ -7,6 +7,7 @@ from PyQt5.QtGui import *
 from PyQt5.QtGui import QPainter, QPen
 from PyQt5.QtCore import Qt
 from orCeph_interfaz import Ui_MainWindow
+from functools import partial
 
 class Aplicacion(QMainWindow):
     def __init__(self, width, height):
@@ -20,35 +21,20 @@ class Aplicacion(QMainWindow):
         self.ui.setupUi(self, width, height)
         
         self.ui.btn_buscar.clicked.connect(self.open_image)
-        
 
-        self.posicion_1 = [0, 0]
-        self.posicion_2 = [0, 0]
+        self.ui.buttonList[0].clicked.connect(lambda: self.drawPoint('S'))
+        self.ui.buttonList[1].clicked.connect(lambda: self.drawPoint('N'))
+
+        self.puntosSteinerList = list(self.ui.puntosSteiner.keys())
+
+        for i, arg in enumerate(self.puntosSteinerList):
+            self.ui.buttonList[i].clicked.connect(partial(self.drawPoint, arg))
 
         self.show()
-    
-    
-    def mousePressEvent(self, event):
-        if event.buttons() & Qt.LeftButton:
-            self.posicion_1[0] = event.pos().x()
-            self.posicion_1[1] = event.pos().y()
-    
-    def mouseReleaseEvent(self, event):
-        self.posicion_2[0] = event.pos().x()
-        self.posicion_2[1] = event.pos().y()
 
-        self.update()
     
-    def paintEvent(self, event):
-        painter = QPainter()
-        painter.begin(self)
-        pincel = QPen(Qt.black, 5)
-
-        painter.setPen(pincel)
-        painter.drawLine(self.posicion_1[0], self.posicion_1[1], self.posicion_2[0], self.posicion_2[1])
-
-        painter.end()
-    
+    def drawPoint(self,label):
+        self.ui.photo.setPoint(label)
     
     def open_image(self, filename=None):
         if not filename:
@@ -70,7 +56,8 @@ class Aplicacion(QMainWindow):
                 alert.exec_()
                 return
         pixmap = QPixmap(filename)
-        self.ui.photo.setPixmap(pixmap)
+        scaled_pixmap = pixmap.scaled(1590, int(height * (1590 / width)))
+        self.ui.photo.setPixmap(scaled_pixmap)
         self.ui.scroll2.setStyleSheet("")
         self.ui.scroll2.setStyleSheet("border: 1px solid black;")
         self.ui.photo.setFixedSize(1590, int(height * (1590 / width)))
