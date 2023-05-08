@@ -19,6 +19,7 @@ def encontrarPuntoInterseccion(m1, b1, m2, b2):
     y = m1 * x + b1
     return x, y
 
+#Obtiene el angulo A
 def  calcularAngulo(AB, BC, CA):
     numerador = (math.pow(CA, 2) + math.pow(AB, 2) - math.pow(BC,2))
     denominador = 2 * CA * AB
@@ -31,9 +32,10 @@ def pruebaAngulo():
     BC = calcularDistancia(puntosPrueba['P2A'], puntosPrueba["P3A"])
     CA = calcularDistancia(puntosPrueba['P3A'], puntosPrueba["P1A"])
     print(calcularAngulo(AB,BC,CA))
+ 
 
 # Diccionarios puntos
-puntosSteiner = {
+puntos = {
     'S':(21,32),
     'N':(15,12),
     'N\'':(13,12),
@@ -90,145 +92,139 @@ puntosPrueba = {
     "P3A":(-1,-2)
 }
 
+planos = {}
+
+angulos = {}
+
 def calcularPlanos():
     planosContador = 0
-    planos = {}
-    if('Gn' in puntosSteiner):
-        if('Go' in puntosSteiner):
-            distancia = calcularDistancia(puntosSteiner['Gn'], puntosSteiner['Go'])
-            planos['PM'] = distancia
+    
+    if('Gn' in puntos):
+        if('Go' in puntos):
+            planos['PM'] = calcularDistancia(puntos['Gn'], puntos['Go'])
             planosContador  += 1
 
-        if('Pt' in puntosSteiner):
-            distancia = calcularDistancia(puntosSteiner['Pt'], puntosSteiner['Gn'])
-            planos['Pt-Gn'] = distancia
+        if('Pt' in puntos):
+            planos['Pt-Gn'] = calcularDistancia(puntos['Pt'], puntos['Gn'])
             planosContador  += 1
 
-    if('N' in puntosSteiner):
-        if('S' in puntosSteiner):
-            distancia = calcularDistancia(puntosSteiner['S'], puntosSteiner['N'])
-            planos['SN'] = distancia
+    if('N' in puntos):
+        if('S' in puntos):
+            planos['SN'] = calcularDistancia(puntos['S'], puntos['N'])
             planosContador  += 1
 
-        if('A' in puntosSteiner):
-            distancia = calcularDistancia(puntosSteiner['N'], puntosSteiner['A'])
-            planos['NA'] = distancia
+        if('A' in puntos):
+            planos['NA'] = calcularDistancia(puntos['N'], puntos['A'])
             planosContador  += 1
 
-            if('IIS' in puntosSteiner):
-                m1, b1 = encontrarEcuacion(puntosSteiner['N'],puntosSteiner['A'])
-                m2, b2 = encontrarPerpendicular(m1,b1, puntosSteiner['IIS'])
+            if('IIS' in puntos):
+                m1, b1 = encontrarEcuacion(puntos['N'],puntos['A'])
+                m2, b2 = encontrarPerpendicular(m1,b1, puntos['IIS'])
                 x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
                 P = (x, y)
-                distancia = calcularDistancia(P, puntosSteiner['IIS'])
-                planos['IIS-NA'] = distancia
+                planos['IIS-NA'] = calcularDistancia(P, puntos['IIS'])
                 planosContador  += 1
 
-        if('B' in puntosSteiner):
-            distancia = calcularDistancia(puntosSteiner['N'], puntosSteiner['B'])
+        if('B' in puntos):
+            distancia = calcularDistancia(puntos['N'], puntos['B'])
             planos['NB'] = distancia
             planosContador  += 1
-            if('III' in puntosSteiner):
-                m1, b1 = encontrarEcuacion(puntosSteiner['N'],puntosSteiner['B'])
-                m2, b2 = encontrarPerpendicular(m1,b1, puntosSteiner['III'])
+            if('III' in puntos):
+                m1, b1 = encontrarEcuacion(puntos['N'],puntos['B'])
+                m2, b2 = encontrarPerpendicular(m1,b1, puntos['III'])
                 x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
                 P = (x, y)
-                distancia = calcularDistancia(P, puntosSteiner['III'])
-                planos['III-NB'] = distancia
+                planos['III-NB'] = calcularDistancia(P, puntos['III'])
                 planosContador  += 1
 
-            if('Pg' in puntosSteiner):
-                m1, b1 = encontrarEcuacion(puntosSteiner['N'],puntosSteiner['B'])
-                m2, b2 = encontrarPerpendicular(m1,b1, puntosSteiner['Pg'])
+            if('Pg' in puntos):
+                m1, b1 = encontrarEcuacion(puntos['N'],puntos['B'])
+                m2, b2 = encontrarPerpendicular(m1,b1, puntos['Pg'])
                 x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
                 P = (x, y)
-                distancia = calcularDistancia(P, puntosSteiner['Pg'])
-                planos['Pg-NB'] = distancia
+                planos['Pg-NB'] = calcularDistancia(P, puntos['Pg'])
                 planosContador  += 1
 
-        if('D' in puntosSteiner):
-            distancia = calcularDistancia(puntosSteiner['N'], puntosSteiner['D'])
-            planos['ND'] = distancia
+        if('D' in puntos):
+            planos['ND'] = calcularDistancia(puntos['N'], puntos['D'])
             planosContador  += 1
 
-        if('Ba' in puntosSteiner):
-            distancia = calcularDistancia(puntosSteiner['N'], puntosSteiner['Ba'])
-            planos['N-Ba'] = distancia
+        if('Ba' in puntos):
+            planos['N-Ba'] = calcularDistancia(puntos['N'], puntos['Ba'])
             planosContador  += 1
 
-        if('Gn' in puntosSteiner):
-            distancia = calcularDistancia(puntosSteiner['N'], puntosSteiner['Gn'])
-            planos['N-Gn'] = distancia
+        if('Gn' in puntos):
+            planos['N-Gn'] = calcularDistancia(puntos['N'], puntos['Gn'])
             planosContador  += 1
         
-    if('S' in puntosSteiner):
-        if('N' in puntosSteiner):
-            m1, b1 = encontrarEcuacion(puntosSteiner['S'],puntosSteiner['N'])
-            if('Pg' in puntosSteiner):
-                m2, b2 = encontrarPerpendicular(m1,b1, puntosSteiner['Pg'])
+    if('S' in puntos):
+        if('N' in puntos):
+            m1, b1 = encontrarEcuacion(puntos['S'],puntos['N'])
+            if('Pg' in puntos):
+                m2, b2 = encontrarPerpendicular(m1,b1, puntos['Pg'])
                 x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
                 L = (x, y)
-                distancia = calcularDistancia(L, puntosSteiner['S'])
-                planos['Silla-L'] = distancia
+                planos['Silla-L'] = calcularDistancia(L, puntos['S'])
                 planosContador  += 1
                 
-            if('Co' in puntosSteiner):
-                m2, b2 = encontrarPerpendicular(m1,b1, puntosSteiner['Co'])
+            if('Co' in puntos):
+                m2, b2 = encontrarPerpendicular(m1,b1, puntos['Co'])
                 x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
                 E = (x, y)
-                distancia = calcularDistancia(E, puntosSteiner['S'])
-                planos['Silla-E'] = distancia
+                planos['Silla-E'] = calcularDistancia(E, puntos['S'])
                 planosContador  += 1
     
-    if('III' in puntosSteiner):
-        if('AII' in puntosSteiner):
-            distancia = calcularDistancia(puntosSteiner['III'], puntosSteiner['AII'])
-            planos['III-AII'] = distancia
+    if('III' in puntos):
+        if('AII' in puntos):
+            planos['III-AII'] = calcularDistancia(puntos['III'], puntos['AII'])
             planosContador  += 1
             
-        if('OMI' in puntosSteiner):
-            distancia = calcularDistancia(puntosSteiner['III'], puntosSteiner['OMI'])
-            planos['III-OMI'] = distancia
+        if('OMI' in puntos):
+            planos['III-OMI'] = calcularDistancia(puntos['III'], puntos['OMI'])
             planosContador  += 1
 
-    if('IIS' in puntosSteiner):
-        if('AIS' in puntosSteiner):
-            distancia = calcularDistancia(puntosSteiner['IIS'], puntosSteiner['AII'])
-            planos['IIS-AIS'] = distancia
+    if('IIS' in puntos):
+        if('AIS' in puntos):
+            planos['IIS-AIS'] = calcularDistancia(puntos['IIS'], puntos['AII'])
             planosContador  += 1
 
-    if('Po' in puntosSteiner):
-        if('Or' in puntosSteiner):
-            distancia = calcularDistancia(puntosSteiner['Po'], puntosSteiner['Or'])
-            planos['Po-Or'] = distancia
+    if('Po' in puntos):
+        if('Or' in puntos):
+            planos['Po-Or'] = calcularDistancia(puntos['Po'], puntos['Or'])
             planosContador  += 1
     
-    if('Pg\'' in puntosSteiner):
-        if('Prn' in puntosSteiner):
-            distancia = calcularDistancia(puntosSteiner['Pg\''], puntosSteiner['Prn'])
-            planos['Linea S'] = distancia
+    if('Pg\'' in puntos):
+        if('Prn' in puntos):
+            planos['Linea S'] = calcularDistancia(puntos['Pg\''], puntos['Prn'])
             planosContador  += 1
-            if('LS' in puntosSteiner):
-                m1, b1 = encontrarEcuacion(puntosSteiner['Pg\''],puntosSteiner['Prn'])
-                m2, b2 = encontrarPerpendicular(m1,b1, puntosSteiner['LS'])
+            if('LS' in puntos):
+                m1, b1 = encontrarEcuacion(puntos['Pg\''],puntos['Prn'])
+                m2, b2 = encontrarPerpendicular(m1,b1, puntos['LS'])
                 x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
                 P = (x, y)
-                distancia = calcularDistancia(P, puntosSteiner['LS'])
-                planos['(Pg\' - Prn) - LS'] = distancia
+                planos['(Pg\' - Prn) - LS'] = calcularDistancia(P, puntos['LS'])
                 planosContador  += 1
 
-            if('LS' in puntosSteiner):
-                m1, b1 = encontrarEcuacion(puntosSteiner['Pg\''],puntosSteiner['Prn'])
-                m2, b2 = encontrarPerpendicular(m1,b1, puntosSteiner['LI'])
+            if('LS' in puntos):
+                m1, b1 = encontrarEcuacion(puntos['Pg\''],puntos['Prn'])
+                m2, b2 = encontrarPerpendicular(m1,b1, puntos['LI'])
                 x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
                 P = (x, y)
-                distancia = calcularDistancia(P, puntosSteiner['LI'])
-                planos['(Pg\' - Prn) - LI'] = distancia
+                planos['(Pg\' - Prn) - LI'] = calcularDistancia(P, puntos['LI'])
                 planosContador  += 1
 
-    #print(planos)
-    #print(len(planos))
-    #print(planosContador)
+    print(planos)
+    print(len(planos))
+    print(planosContador)
+
+def calcularAngulos():
+    if('SN' in planos):
+        if('NA' in planos):
+            if('S' in puntos):
+                distanciaSA = calcularDistancia(puntos['A'], puntos['S'])
+                # El punto de steiner N será el punto A de la función
+                angulos['SNA'] = calcularAngulo(planos['SN'], distanciaSA, planos['NA'])
+
 
 #Pruebas
 #print(calcularDistancia(puntosPrueba['1'],puntosPrueba['2']))
@@ -242,4 +238,7 @@ def calcularPlanos():
 #print(encontrarPuntoInterseccion(3,-4,m2, b2))
 
 #pruebaAngulo()
+#print(calcularAngulo(6.4,7.6,3.6))
+
+
 calcularPlanos()
