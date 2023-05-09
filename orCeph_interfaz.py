@@ -18,48 +18,49 @@ from PyQt5.QtGui import *
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow, width, height):
         self.puntosSteiner = {
-            'S':(21,32),
-            'N':(15,12),
-            'N\'':(13,12),
-            'Or':(13,11),
+            'S': None,
+            'N': None,
+            'N\'': None,
+            'Or': None,
             'Pr': None,
-            'A':(32,64),
-            'A\'':(17,13),
-            'B':(43,54),
-            'B\'':(15,65),
-            'D':(13,67),
-            'Pg':(54,14),
-            'Pg\'':(24,76),
-            'Me':(83,4),
-            'Me\'':(19,12),
+            'A': None,
+            'A\'': None,
+            'B': None,
+            'B\'': None,
+            'D': None,
+            'Pg': None,
+            'Pg\'': None,
+            'Me': None,
+            'Me\'': None,
             'Gn': None,
-            'Gn\'':(19,12),
-            'Go':(83,4),
-            'Go\'':(19,12),
-            'III':(54,4),
-            'AII':(83,4),
-            'IIS':(83,4),
-            'AIS':(19,12),
-            'OMI':(83,4),
-            'OMS':(83,4),
-            'St':(83,4),
-            'LS':(83,4),
-            'LI':(83,4),
-            'ENP':(83,4),
-            'ENA':(83,4),
-            'Ar':(83,4),
-            'Prn':(83,4),
-            'Ba':(83,4),
-            'Po':(83,4),
-            'Pt':(83,4),
-            'Co':(83,4),
-            'G':(83,4),
-            'G\'':(83,4),
-            'Sn':(83,4),
-            'Sn\'':(83,4),
-            'Tm':(83,4),
+            'Gn\'': None,
+            'Go': None,
+            'Go\'': None,
+            'III': None,
+            'AII': None,
+            'IIS': None,
+            'AIS': None,
+            'OMI': None,
+            'OMS': None,
+            'St': None,
+            'LS': None,
+            'LI': None,
+            'ENP': None,
+            'ENA': None,
+            'Ar': None,
+            'Prn': None,
+            'Ba': None,
+            'Po': None,
+            'Pt': None,
+            'Co': None,
+            'G': None,
+            'G\'': None,
+            'Sn': None,
+            'Sn\'': None,
+            'Tm': None,
             'Tr': None
         }
+
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(width, height - 70)
         MainWindow.move(0,0)
@@ -239,10 +240,11 @@ class Ui_MainWindow(object):
 
 class PhotoLabel(QLabel):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setAlignment(Qt.AlignCenter)
         self.posicion = [0,0]
+        self.posicion_anterior = [0,0]
         self.pixmap = None
         self.qp = None
         self.pen = None
@@ -256,6 +258,8 @@ class PhotoLabel(QLabel):
 
     def setPixmap(self, *args, **kwargs):
         self.pixmap = QPixmap(*args, **kwargs)
+        self.pixmap_temp = QPixmap(*args, **kwargs)
+        self.main_window = None
         #qp = QPainter(pixmap)
         #pen = QPen(Qt.white, 5)
         #qp.setPen(pen)
@@ -270,9 +274,11 @@ class PhotoLabel(QLabel):
             border: none;
         }''')
 
-    def setPoint(self, texto):
+    def setPoint(self,texto, num_button, main_window):
         if(self.pixmap != None):
             self.punto = texto
+            self.numbutton = num_button
+            self.main_window = main_window
             # qp.drawPoint(self.posicion[0],self.posicion[1])
             # qp.drawText(self.posicion[0]+10,self.posicion[1]-5, texto)
             # super().setPixmap(self.pixmap)
@@ -284,13 +290,49 @@ class PhotoLabel(QLabel):
             self.posicion[1] = event.pos().y()
             print(self.posicion)
             self.update()
-            if(self.punto != "" and self.punto != "S"):
+            if(self.punto != "" and self.main_window != None and self.main_window.puntosSteiner[self.punto] == None):
                 print("Punto seleccionado")
                 self.qp = QPainter(self.pixmap)
                 self.pen = QPen(Qt.white, 9)
                 self.qp.setPen(self.pen)
                 print(self.posicion)
                 self.qp.drawPoint(self.posicion[0],self.posicion[1])
-                self.qp.drawText(self.posicion[0]+10,self.posicion[1]-5, self.punto)
+                self.qp.drawText(self.posicion[0]+5,self.posicion[1]-5, self.punto)
+                self.main_window.buttonList[self.numbutton].setText(f"({self.posicion[0]},{self.posicion[1]})")
+                # self.posicion_anterior[0] = self.posicion[0]
+                # self.posicion_anterior[1] = self.posicion[1]
+                self.main_window.puntosSteiner[self.punto] = (self.posicion[0], self.posicion[1])
                 self.qp.end()
                 super().setPixmap(self.pixmap)
+            elif(self.main_window.puntosSteiner[self.punto] != None):
+                self.qp = QPainter(self.pixmap)
+                self.posicion_anterior[0] = self.main_window.puntosSteiner[self.punto][0]
+                self.posicion_anterior[1] = self.main_window.puntosSteiner[self.punto][1]
+                for i in range(self.posicion_anterior[0]-4, self.posicion_anterior[0]+5):
+                    for j in range(self.posicion_anterior[1]-4, self.posicion_anterior[1]+5):
+                        bg_color = QColor(self.pixmap_temp.toImage().pixel(i, j))
+                        self.qp.setPen(QPen(bg_color, 1))
+                        self.qp.drawPoint(i,j)
+                for i in range (self.posicion_anterior[0]+4, self.posicion_anterior[0]+35):
+                    for j in range(self.posicion_anterior[1]-14, self.posicion_anterior[1]-3):
+                        bg_color = QColor(self.pixmap_temp.toImage().pixel(i, j))
+                        self.qp.setPen(QPen(bg_color, 1))
+                        self.qp.drawPoint(i,j)
+                self.pen = QPen(Qt.white, 9)
+                self.qp.setPen(self.pen)
+                self.qp.drawPoint(self.posicion[0],self.posicion[1])
+                self.qp.drawText(self.posicion[0]+10,self.posicion[1]-5, self.punto)
+                self.main_window.puntosSteiner[self.punto] = (self.posicion[0], self.posicion[1])
+                self.qp.end()
+                super().setPixmap(self.pixmap)
+                #####
+                # self.qp = QPainter(self.pixmap)
+                # rect = QRect(self.posicion[0]-10, self.posicion[1]-10, 20, 20)
+                # # save the background color
+                # bg_color = QColor(self.pixmap_temp.toImage().pixel(self.posicion[0], self.posicion[1]))
+                # # erase the rectangle
+                # self.qp.eraseRect(rect)
+                # # draw a rectangle over the erased area with the background color
+                # self.qp.fillRect(rect, bg_color)
+                # self.qp.end()
+                # super().setPixmap(self.pixmap)

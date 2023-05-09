@@ -22,19 +22,22 @@ class Aplicacion(QMainWindow):
         
         self.ui.btn_buscar.clicked.connect(self.open_image)
 
-        self.ui.buttonList[0].clicked.connect(lambda: self.drawPoint('S'))
-        self.ui.buttonList[1].clicked.connect(lambda: self.drawPoint('N'))
-
         self.puntosSteinerList = list(self.ui.puntosSteiner.keys())
 
         for i, arg in enumerate(self.puntosSteinerList):
-            self.ui.buttonList[i].clicked.connect(partial(self.drawPoint, arg))
+            self.ui.buttonList[i].clicked.connect(partial(self.drawPoint, arg, i))
+        
+        self.ui.btn_calcular.clicked.connect(self.calcularSteiner)
 
         self.show()
 
     
-    def drawPoint(self,label):
-        self.ui.photo.setPoint(label)
+    def calcularSteiner(self):
+        print(f'Puntos Steiner: \n {self.ui.puntosSteiner}')
+
+    def drawPoint(self,label, num_button):
+        self.ui.photo.setPoint(label, num_button,self.ui)
+        
     
     def open_image(self, filename=None):
         if not filename:
