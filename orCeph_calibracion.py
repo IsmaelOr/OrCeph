@@ -27,10 +27,37 @@ class Aplicacion(QMainWindow):
         for i, arg in enumerate(self.puntosSteinerList):
             self.ui.buttonList[i].clicked.connect(partial(self.drawPoint, arg, i))
         
+        
+        self.ui.btn_reajustar.clicked.connect(self.colocarDistancia)
         self.ui.btn_calcular.clicked.connect(self.calcularSteiner)
+        self.ui.btn_aceptarDistancia.clicked.connect(self.setDistancia)
 
         self.show()
 
+    def setDistancia(self):
+        self.ui.distanciaInput = self.ui.input_medida.value()
+        self.ui.unidadInput = self.ui.select_unidad.currentText()
+        if(self.ui.distanciaInput == 0):
+            alert = QMessageBox()
+            alert.setIcon(QMessageBox.Information)
+            alert.setText("Porfavor ingrese la distancia entre los puntos ingresados")
+            alert.setWindowTitle("Alert")
+            alert.setStandardButtons(QMessageBox.Ok)
+            alert.exec_()
+            return
+        else:
+            self.pixelInUnidad = (1 * self.ui.distanciaInput / (self.ui.puntosDistancia['PuntoB'][1]-self.ui.puntosDistancia['PuntoA'][1]))
+            # print(self.pixelInUnidad)  Cuantos mm equivale 1px
+            for i, arg in enumerate(self.puntosSteinerList):
+                self.ui.buttonList[i].setEnabled(True)
+                self.ui.btn_calcular.setEnabled(True)
+            self.ui.photo.distancia = False
+            self.ui.lbl_indicacion.setText("Presione uno de los botones del listado de Puntos de Steiner para colocarlo:")
+    
+
+    def colocarDistancia(self):
+        self.ui.photo.setDistancia(self.ui)
+        self.ui.lbl_indicacion.setText("Coloque dos puntos en la radiografía para trazar una linea:")
     
     def calcularSteiner(self):
         print(f'Puntos Steiner: \n {self.ui.puntosSteiner}')
@@ -64,6 +91,9 @@ class Aplicacion(QMainWindow):
         self.ui.scroll2.setStyleSheet("")
         self.ui.scroll2.setStyleSheet("border: 1px solid black;")
         self.ui.photo.setFixedSize(1590, int(height * (1590 / width)))
+        self.ui.btn_reajustar.setEnabled(True)
+        self.ui.btn_reajustar.setText("Colocar Distancia")
+        self.ui.lbl_indicacion.setText("Presione el botón 'Colocar distancia'.")
 
 
 

@@ -1,1 +1,1 @@
-self.photo
+Widget

@@ -61,6 +61,14 @@ class Ui_MainWindow(object):
             'Tr': None
         }
 
+        self.puntosDistancia = {
+            'PuntoA': None,
+            'PuntoB': None
+        }
+
+        self.distanciaInput = None
+        self.unidadInput = None
+
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(width, height - 70)
         MainWindow.move(0,0)
@@ -68,7 +76,7 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.widget_2 = QtWidgets.QWidget(self.centralwidget)
-        self.widget_2.setGeometry(QtCore.QRect(width - 300, 110, 280, 38))
+        self.widget_2.setGeometry(QtCore.QRect(width - 725, 50, 400, 38))
         self.widget_2.setObjectName("widget_2")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget_2)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -77,19 +85,27 @@ class Ui_MainWindow(object):
         self.lbl_ditancia.setObjectName("lbl_ditancia")
         self.horizontalLayout.addWidget(self.lbl_ditancia)
         self.input_medida = QtWidgets.QDoubleSpinBox(self.widget_2)
+        self.input_medida.setEnabled(False)
         self.input_medida.setObjectName("input_medida")
         self.horizontalLayout.addWidget(self.input_medida)
         self.select_unidad = QtWidgets.QComboBox(self.widget_2)
         self.select_unidad.setObjectName("select_unidad")
+        self.select_unidad.setEnabled(False)
         self.select_unidad.addItem("")
         self.select_unidad.addItem("")
         self.select_unidad.addItem("")
         self.horizontalLayout.addWidget(self.select_unidad)
+        self.btn_aceptarDistancia = QtWidgets.QPushButton(self.widget_2)
+        self.btn_aceptarDistancia.setObjectName("btn_aceptarDistancia")
+        self.horizontalLayout.addWidget(self.btn_aceptarDistancia)
+        self.btn_aceptarDistancia.setEnabled(False)
+
         self.widget_3 = QtWidgets.QWidget(self.centralwidget)
-        self.widget_3.setGeometry(QtCore.QRect(width - 300, 160, 281, height - 350))
+        #self.widget_3.setStyleSheet("background:'red'")
+        self.widget_3.setGeometry(QtCore.QRect(width - 310, 25, 300, height - 400))
         self.widget_3.setObjectName("widget_3")
         self.lbl_lista = QtWidgets.QLabel(self.widget_3)
-        self.lbl_lista.setGeometry(QtCore.QRect(10, 20, 261, 16))
+        self.lbl_lista.setGeometry(QtCore.QRect(10, 0, 261, 16))
         font = QtGui.QFont()
         font.setPointSize(10)
         font.setBold(True)
@@ -97,7 +113,7 @@ class Ui_MainWindow(object):
         self.lbl_lista.setFont(font)
         self.lbl_lista.setObjectName("lbl_lista")
         self.line = QtWidgets.QFrame(self.widget_3)
-        self.line.setGeometry(QtCore.QRect(10, 30, 261, 16))
+        self.line.setGeometry(QtCore.QRect(10, 20, 281, 5))
         self.line.setFrameShape(QtWidgets.QFrame.HLine)
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
@@ -110,10 +126,8 @@ class Ui_MainWindow(object):
         i = 0
         for k,v in self.puntosSteiner.items():
             self.labelList.append(QLabel(f"{k}:"))
-            if v != None:
-                self.buttonList.append(QPushButton(f"{v}"))
-            else:
-                self.buttonList.append(QPushButton("Colocar Punto"))
+            self.buttonList.append(QPushButton("Colocar Punto"))
+            self.buttonList[i].setEnabled(False)
             self.formLayout.addRow(self.labelList[i], self.buttonList[i])
             i = i + 1
 
@@ -121,21 +135,51 @@ class Ui_MainWindow(object):
         self.scroll = QScrollArea()
         self.scroll.setWidget(self.groupBox)
         self.scroll.setWidgetResizable(True)
-        self.scroll.setFixedHeight(height-450)
+        self.scroll.setFixedHeight(height-460)
 
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.scroll)
 
         self.widget_3.setLayout(self.layout)
 
-
+        self.btn_reajustar = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_reajustar.setGeometry(QtCore.QRect(width - 300, 700, 281, 41))
+        self.btn_reajustar.setObjectName("btn_reajustar")
+        self.btn_reajustar.setEnabled(False)
 
         self.btn_calcular = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_calcular.setGeometry(QtCore.QRect(width - 290, 900, 261, 41))
+        self.btn_calcular.setGeometry(QtCore.QRect(width - 300, 750, 281, 41))
         self.btn_calcular.setObjectName("btn_calcular")
+        self.btn_calcular.setEnabled(False)
+
+
+        self.btn_verPuntos = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_verPuntos.setGeometry(QtCore.QRect(width - 300, 800, 281, 41))
+        self.btn_verPuntos.setObjectName("btn_calcular")
+        self.btn_verPuntos.setEnabled(False)
+
+        self.btn_verPlanos = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_verPlanos.setGeometry(QtCore.QRect(width - 300, 850, 130, 41))
+        self.btn_verPlanos.setObjectName("btn_verPlanos")
+        self.btn_verPlanos.setEnabled(False)
+
+        self.btn_verAngulos = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_verAngulos.setGeometry(QtCore.QRect(width - 150, 850, 130, 41))
+        self.btn_verAngulos.setObjectName("btn_verAngulos")
+        self.btn_verAngulos.setEnabled(False)
+
+        self.btn_descargarInforme = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_descargarInforme.setGeometry(QtCore.QRect(width - 300, 900, 281, 41))
+        self.btn_descargarInforme.setObjectName("btn_descargarInforme")
+        self.btn_descargarInforme.setEnabled(False)
+
+        self.btn_descargarTrazado = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_descargarTrazado.setGeometry(QtCore.QRect(width - 300, 950, 281, 41))
+        self.btn_descargarTrazado.setObjectName("btn_descargarInforme")
+        self.btn_descargarTrazado.setEnabled(False)
 
         self.widget_5 = QtWidgets.QWidget(self.centralwidget)
-        self.widget_5.setGeometry(QtCore.QRect(-5, 0, 1700, 1080))
+        self.widget_5.setGeometry(QtCore.QRect(-5, 85, 1620, 920))
         self.widget_5.setObjectName("widget_5")
 
         self.photo = PhotoLabel(self.widget_5)
@@ -175,7 +219,7 @@ class Ui_MainWindow(object):
         ####### 
 
         self.widget = QtWidgets.QWidget(self.centralwidget)
-        self.widget.setGeometry(QtCore.QRect(30, 20, 536, 60))
+        self.widget.setGeometry(QtCore.QRect(30, 20, 800, 60))
         self.widget.setObjectName("widget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.widget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -197,7 +241,7 @@ class Ui_MainWindow(object):
         self.lbl_indicacion.setObjectName("lbl_indicacion")
         self.verticalLayout.addWidget(self.lbl_indicacion)
         self.widget1 = QtWidgets.QWidget(self.centralwidget)
-        self.widget1.setGeometry(QtCore.QRect(width-300, 70, 281, 25))
+        self.widget1.setGeometry(QtCore.QRect(width-725, 25, 400, 25))
         self.widget1.setObjectName("widget1")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget1)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -207,7 +251,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.addWidget(self.lbl_radiografia)
         self.btn_buscar = QtWidgets.QPushButton(self.widget1)
         self.btn_buscar.setObjectName("btn_buscar")
-        self.horizontalLayout_2.addWidget(self.btn_buscar)
+        self.horizontalLayout_2.addWidget(self.btn_buscar, 2)
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1086, 21))
@@ -229,14 +273,21 @@ class Ui_MainWindow(object):
         self.select_unidad.setItemText(2, _translate("MainWindow", "in"))
         self.lbl_lista.setText(_translate("MainWindow", "Lista de Puntos de Steiner:"))
         self.btn_calcular.setText(_translate("MainWindow", "Calcular"))
+        self.btn_reajustar.setText(_translate("MainWindow", "Colocar Distancia"))
         #self.imagen.setText(_translate("MainWindow", "Imagen"))
         # self.btn_mas.setText(_translate("MainWindow", "+"))
         # self.btn_menos.setText(_translate("MainWindow", "-"))
         # self.lbl_zoom.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">Zoom</p></body></html>"))
         self.lbl_titulo.setText(_translate("MainWindow", "¡Bienvenido a OrCeph!"))
-        self.lbl_indicacion.setText(_translate("MainWindow", "Coloque dos puntos de los cuales conozca la distancia entre ellos:"))
-        self.lbl_radiografia.setText(_translate("MainWindow", "Ingrese la radiografía: "))
+        self.lbl_indicacion.setText(_translate("MainWindow", "Ingrese la radiografía que desea analizar:"))
+        self.lbl_radiografia.setText(_translate("MainWindow", "Ingrese la radiografía:       "))
         self.btn_buscar.setText(_translate("MainWindow", "Buscar Imagen"))
+        self.btn_aceptarDistancia.setText(_translate("MainWindow", "Aceptar"))
+        self.btn_descargarInforme.setText(_translate("MainWindow", "Descargar Informe"))
+        self.btn_descargarTrazado.setText(_translate("MainWindow", "Descargar Trazado"))
+        self.btn_verPlanos.setText(_translate("MainWindow", "Visualizar Planos"))
+        self.btn_verAngulos.setText(_translate("MainWindow", "Visualizar Angulos"))
+        self.btn_verPuntos.setText(_translate("MainWindow", "Recolocar Puntos"))
 
 class PhotoLabel(QLabel):
 
@@ -249,6 +300,7 @@ class PhotoLabel(QLabel):
         self.qp = None
         self.pen = None
         self.punto = ""
+        self.distancia = False
         self.setText('\n\n Drop Image Here \n\n')
         self.setStyleSheet('''
         QLabel {
@@ -284,13 +336,48 @@ class PhotoLabel(QLabel):
             # super().setPixmap(self.pixmap)
             # print("Fin del punto")
 
+    def setDistancia(self, main_window):
+        if(self.pixmap != None):
+            self.main_window = main_window
+            self.distancia = True
+        if(self.main_window.puntosDistancia['PuntoA'] != None and self.main_window.puntosDistancia['PuntoB'] != None):
+            self.main_window.lbl_indicacion.setText("Coloque los dos puntos de distancia nuevamente:")
+            self.qp = QPainter(self.pixmap)
+            if(self.main_window.puntosDistancia['PuntoA'][1] > self.main_window.puntosDistancia['PuntoB'][1]):
+                puntoYmenor = self.main_window.puntosDistancia['PuntoB'][1]
+                puntoYmayor = self.main_window.puntosDistancia['PuntoA'][1]
+            else:
+                puntoYmenor = self.main_window.puntosDistancia['PuntoA'][1]
+                puntoYmayor = self.main_window.puntosDistancia['PuntoB'][1]
+            if(self.main_window.puntosDistancia['PuntoA'][0] > self.main_window.puntosDistancia['PuntoB'][0]):
+                puntoXmenor = self.main_window.puntosDistancia['PuntoB'][0]
+                puntoXmayor = self.main_window.puntosDistancia['PuntoA'][0]
+            else:
+                puntoXmenor = self.main_window.puntosDistancia['PuntoA'][0]
+                puntoXmayor = self.main_window.puntosDistancia['PuntoB'][0]
+            for i in range(puntoXmenor-10, puntoXmayor+10):
+                for j in range(puntoYmenor-10, puntoYmayor+10):
+                    print(f'{i}, {j}')
+                    bg_color = QColor(self.pixmap_temp.toImage().pixel(i, j))
+                    self.qp.setPen(QPen(bg_color, 1))
+                    self.qp.drawPoint(i,j) 
+            self.qp.end()
+            super().setPixmap(self.pixmap)
+            self.main_window.puntosDistancia['PuntoA'] = None
+            self.main_window.puntosDistancia['PuntoB'] = None
+            self.main_window.select_unidad.setEnabled(False)
+            self.main_window.input_medida.setEnabled(False)
+            self.main_window.input_medida.setValue(0)
+            self.main_window.btn_aceptarDistancia.setEnabled(False)
+
     def mousePressEvent(self, event):
         if(event.buttons() & Qt.LeftButton):
             self.posicion[0] = event.pos().x()
             self.posicion[1] = event.pos().y()
             print(self.posicion)
             self.update()
-            if(self.punto != "" and self.main_window != None and self.main_window.puntosSteiner[self.punto] == None):
+
+            if(self.distancia == False and self.punto != "" and self.main_window != None and self.main_window.puntosSteiner[self.punto] == None):
                 print("Punto seleccionado")
                 self.qp = QPainter(self.pixmap)
                 self.pen = QPen(Qt.white, 9)
@@ -304,7 +391,7 @@ class PhotoLabel(QLabel):
                 self.main_window.puntosSteiner[self.punto] = (self.posicion[0], self.posicion[1])
                 self.qp.end()
                 super().setPixmap(self.pixmap)
-            elif(self.main_window.puntosSteiner[self.punto] != None):
+            elif(self.distancia == False and self.main_window != None and self.main_window.puntosSteiner[self.punto] != None):
                 self.qp = QPainter(self.pixmap)
                 self.posicion_anterior[0] = self.main_window.puntosSteiner[self.punto][0]
                 self.posicion_anterior[1] = self.main_window.puntosSteiner[self.punto][1]
@@ -325,6 +412,30 @@ class PhotoLabel(QLabel):
                 self.main_window.puntosSteiner[self.punto] = (self.posicion[0], self.posicion[1])
                 self.qp.end()
                 super().setPixmap(self.pixmap)
+            elif(self.distancia and self.main_window != None):
+                if(self.main_window.puntosDistancia['PuntoA'] == None):
+                    self.qp = QPainter(self.pixmap)
+                    self.pen = QPen(Qt.white, 9)
+                    self.qp.setPen(self.pen)
+                    self.qp.drawPoint(self.posicion[0],self.posicion[1])
+                    self.main_window.puntosDistancia['PuntoA'] = (self.posicion[0], self.posicion[1])
+                    self.qp.end()
+                    super().setPixmap(self.pixmap)
+                elif(self.main_window.puntosDistancia['PuntoB'] == None):
+                    self.qp = QPainter(self.pixmap)
+                    self.pen = QPen(Qt.white, 9)
+                    self.qp.setPen(self.pen)
+                    self.qp.drawPoint(self.posicion[0],self.posicion[1])
+                    self.main_window.puntosDistancia['PuntoB'] = (self.posicion[0], self.posicion[1])
+                    self.qp.drawLine(self.main_window.puntosDistancia['PuntoA'][0], self.main_window.puntosDistancia['PuntoA'][1], self.main_window.puntosDistancia['PuntoB'][0], self.main_window.puntosDistancia['PuntoB'][1])
+                    self.qp.end()
+                    super().setPixmap(self.pixmap)
+                    self.main_window.lbl_indicacion.setText("Coloque la distancia entre los puntos:")
+                    self.main_window.input_medida.setEnabled(True)
+                    self.main_window.select_unidad.setEnabled(True)
+                    self.main_window.btn_aceptarDistancia.setEnabled(True)
+                    self.main_window.btn_reajustar.setText("Reajustar Distancia")
+                    # self.distancia = False
                 #####
                 # self.qp = QPainter(self.pixmap)
                 # rect = QRect(self.posicion[0]-10, self.posicion[1]-10, 20, 20)
