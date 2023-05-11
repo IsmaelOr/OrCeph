@@ -1,7 +1,5 @@
 import math
 
-
-
 # Diccionarios puntos
 puntos = {
     'S':(21,32),
@@ -24,7 +22,7 @@ puntos = {
     'Go\'':(19,12),
     'III':(54,4),
     'AII':(83,4),
-    'IIS':(83,4),
+    'IIS':(33,3),
     'AIS':(19,12),
     'OMI':(83,4),
     'OMS':(83,4),
@@ -240,13 +238,28 @@ def calcularAngulos():
             # El punto de steiner N será el punto A de la función
             angulos['ANB'] = calcularAngulo(planos['NA'], distanciaAB, planos['NB'])
             angulosContador += 1
+
+    if('IIS-AIS' in planos):
+        if('NA' in planos):
+            angulos['(IIS-AIS)-(N-A)'] = encontrarAngulo(puntos['IIS'], puntos['AIS'], puntos['A'], puntos['N'])
+            angulosContador += 1
+        if('NB' in planos):
+            angulos['(IIS-AIS)-(N-B)'] = encontrarAngulo(puntos['IIS'], puntos['AIS'], puntos['B'], puntos['N'])
+            angulosContador += 1
+    
+    if('III-AII' in planos):
+        if('IIS-AIS' in planos):
+            angulos['(III-AII)- (IIS-AIS)'] = encontrarAngulo(puntos['III'], puntos['AII'], puntos['IIS'], puntos['AIS'])
+            angulosContador += 1
+        if('NB' in planos):
+            angulos['(III-AII)- (N-B)'] = encontrarAngulo(puntos['III'], puntos['AII'], puntos['N'], puntos['B'])
+            angulosContador += 1
+
+
+        
     print(angulos)
     print(angulosContador)
     print(len(angulos))
-
-        
-
-
 
 #Pruebas
 #print(calcularDistancia(puntosPrueba['1'],puntosPrueba['2']))
@@ -262,7 +275,7 @@ def calcularAngulos():
 #pruebaAngulo()
 #print(calcularAngulo(6.4,7.6,3.6))
 
+#print(encontrarAngulo(puntosPrueba['P1C'],puntosPrueba['P2C'],puntosPrueba['P3C'],puntosPrueba['P4C']))
 
 calcularPlanos()
 calcularAngulos()
-print(encontrarAngulo(puntosPrueba['P1C'],puntosPrueba['P2C'],puntosPrueba['P3C'],puntosPrueba['P4C']))
