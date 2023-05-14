@@ -9,6 +9,8 @@ from PyQt5.QtCore import Qt
 from orCeph_interfaz import Ui_MainWindow
 from functools import partial
 
+from moduloSteiner import calcularPlanos2, calcularAngulos2
+
 class Aplicacion(QMainWindow):
     def __init__(self, width, height):
         super().__init__()
@@ -46,7 +48,7 @@ class Aplicacion(QMainWindow):
             alert.exec_()
             return
         else:
-            self.pixelInUnidad = (1 * self.ui.distanciaInput / (self.ui.puntosDistancia['PuntoB'][1]-self.ui.puntosDistancia['PuntoA'][1]))
+            self.ui.pixelUnidad = abs(1 * self.ui.distanciaInput / (self.ui.puntosDistancia['PuntoB'][1]-self.ui.puntosDistancia['PuntoA'][1]))
             # print(self.pixelInUnidad)  Cuantos mm equivale 1px
             for i, arg in enumerate(self.puntosSteinerList):
                 self.ui.buttonList[i].setEnabled(True)
@@ -60,7 +62,14 @@ class Aplicacion(QMainWindow):
         self.ui.lbl_indicacion.setText("Coloque dos puntos en la radiografía para trazar una linea:")
     
     def calcularSteiner(self):
-        print(f'Puntos Steiner: \n {self.ui.puntosSteiner}')
+        # print(f'Puntos Steiner: \n {self.ui.puntosSteiner}')
+        self.ui.planos = calcularPlanos2(self.ui.puntosSteiner, self.ui.planos)
+        self.ui.angulos = calcularAngulos2(self.ui.puntosSteiner, self.ui.planos, self.ui.angulos)
+        for plano,valor in self.ui.planos.items():
+           self.ui.planos[plano] = valor * self.ui.pixelUnidad
+        print(f'Planos: \n ${self.ui.planos}')
+        print(f'Angulos: \n ${self.ui.angulos}')
+
 
     def drawPoint(self,label, num_button):
         self.ui.photo.setPoint(label, num_button,self.ui)

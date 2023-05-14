@@ -66,6 +66,12 @@ class Ui_MainWindow(object):
             'PuntoB': None
         }
 
+        self.planos = {}
+
+        self.angulos = {}
+
+        self.pixelUnidad = None;
+
         self.distanciaInput = None
         self.unidadInput = None
 
@@ -415,7 +421,7 @@ class PhotoLabel(QLabel):
             elif(self.distancia and self.main_window != None):
                 if(self.main_window.puntosDistancia['PuntoA'] == None):
                     self.qp = QPainter(self.pixmap)
-                    self.pen = QPen(Qt.white, 9)
+                    self.pen = QPen(Qt.white, 5)
                     self.qp.setPen(self.pen)
                     self.qp.drawPoint(self.posicion[0],self.posicion[1])
                     self.main_window.puntosDistancia['PuntoA'] = (self.posicion[0], self.posicion[1])
@@ -423,10 +429,10 @@ class PhotoLabel(QLabel):
                     super().setPixmap(self.pixmap)
                 elif(self.main_window.puntosDistancia['PuntoB'] == None):
                     self.qp = QPainter(self.pixmap)
-                    self.pen = QPen(Qt.white, 9)
+                    self.pen = QPen(Qt.white, 5)
                     self.qp.setPen(self.pen)
-                    self.qp.drawPoint(self.posicion[0],self.posicion[1])
-                    self.main_window.puntosDistancia['PuntoB'] = (self.posicion[0], self.posicion[1])
+                    self.qp.drawPoint(self.main_window.puntosDistancia['PuntoA'][0],self.posicion[1])
+                    self.main_window.puntosDistancia['PuntoB'] = (self.main_window.puntosDistancia['PuntoA'][0], self.posicion[1])
                     self.qp.drawLine(self.main_window.puntosDistancia['PuntoA'][0], self.main_window.puntosDistancia['PuntoA'][1], self.main_window.puntosDistancia['PuntoB'][0], self.main_window.puntosDistancia['PuntoB'][1])
                     self.qp.end()
                     super().setPixmap(self.pixmap)
