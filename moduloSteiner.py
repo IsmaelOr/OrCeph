@@ -86,7 +86,7 @@ def encontrarPerpendicular(m1, b1, punto1):
 def encontrarPuntoInterseccion(m1, b1, m2, b2):
     x = (b2- b1)/(m1 - m2)
     y = m1 * x + b1
-    return x, y
+    return int(x), int(y)
 
 #Obtiene el angulo A
 def  calcularAngulo(AB, BC, CA):
@@ -209,20 +209,24 @@ def calcularPlanos(puntos, planos):
     return planos;
 
 
-def calcularPlanos2(puntos, planos):
+def calcularPlanos2(puntos, planos, main_window):
     if(puntos['Gn'] != None):
         if(puntos['Go'] != None):
             planos['PM'] = calcularDistancia(puntos['Gn'], puntos['Go'])
+            main_window.photo.drawPlano(puntos['Gn'], puntos['Go'])
 
         if(puntos['Pt'] != None):
             planos['Pt-Gn'] = calcularDistancia(puntos['Pt'], puntos['Gn'])
+            main_window.photo.drawPlano(puntos['Pt'], puntos['Gn'])
 
     if(puntos['N'] != None):
         if(puntos['S'] != None):
             planos['SN'] = calcularDistancia(puntos['S'], puntos['N'])
+            main_window.photo.drawPlano(puntos['S'], puntos['N'])
 
         if(puntos['A'] != None):
             planos['NA'] = calcularDistancia(puntos['N'], puntos['A'])
+            main_window.photo.drawPlano(puntos['N'], puntos['A'])
 
             if(puntos['IIS'] != None):
                 m1, b1 = encontrarEcuacion(puntos['N'],puntos['A'])
@@ -230,15 +234,18 @@ def calcularPlanos2(puntos, planos):
                 x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
                 P = (x, y)
                 planos['IIS-NA'] = calcularDistancia(P, puntos['IIS'])
+                main_window.photo.drawPlano(P, puntos['IIS'])
 
         if(puntos['B'] != None):
             planos['NB'] = calcularDistancia(puntos['N'], puntos['B'])
+            main_window.photo.drawPlano(puntos['N'], puntos['B'])
             if(puntos['III'] != None):
                 m1, b1 = encontrarEcuacion(puntos['N'],puntos['B'])
                 m2, b2 = encontrarPerpendicular(m1,b1, puntos['III'])
                 x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
                 P = (x, y)
                 planos['III-NB'] = calcularDistancia(P, puntos['III'])
+                main_window.photo.drawPlano(P, puntos['III'])
 
             if(puntos['Pg'] != None):
                 m1, b1 = encontrarEcuacion(puntos['N'],puntos['B'])
@@ -246,15 +253,19 @@ def calcularPlanos2(puntos, planos):
                 x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
                 P = (x, y)
                 planos['Pg-NB'] = calcularDistancia(P, puntos['Pg'])
+                main_window.photo.drawPlano(P, puntos['Pg'])
 
         if(puntos['D'] != None):
             planos['ND'] = calcularDistancia(puntos['N'], puntos['D'])
+            main_window.photo.drawPlano(puntos['N'], puntos['D'])
 
         if(puntos['Ba'] != None):
             planos['N-Ba'] = calcularDistancia(puntos['N'], puntos['Ba'])
+            main_window.photo.drawPlano(puntos['N'], puntos['Ba'])
 
         if(puntos['Gn'] != None):
             planos['N-Gn'] = calcularDistancia(puntos['N'], puntos['Gn'])
+            main_window.photo.drawPlano(puntos['N'], puntos['Gn'])
         
     if(puntos['S'] != None):
         if(puntos['N'] != None):
@@ -264,37 +275,45 @@ def calcularPlanos2(puntos, planos):
                 x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
                 L = (x, y)
                 planos['Silla-L'] = calcularDistancia(L, puntos['S'])
+                main_window.photo.drawPlano(L, puntos['S'])
                 
             if(puntos['Co'] != None):
                 m2, b2 = encontrarPerpendicular(m1,b1, puntos['Co'])
                 x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
                 E = (x, y)
                 planos['Silla-E'] = calcularDistancia(E, puntos['S'])
+                main_window.photo.drawPlano(E, puntos['S'])
     
     if(puntos['III'] != None):
         if(puntos['AII'] != None):
             planos['III-AII'] = calcularDistancia(puntos['III'], puntos['AII'])
+            main_window.photo.drawPlano(puntos['III'], puntos['AII'])
             
         if(puntos['OMI'] != None):
             planos['III-OMI'] = calcularDistancia(puntos['III'], puntos['OMI'])
+            main_window.photo.drawPlano(puntos['III'], puntos['OMI'])
 
     if(puntos['IIS'] != None):
         if('AIS' in puntos):
             planos['IIS-AIS'] = calcularDistancia(puntos['IIS'], puntos['AII'])
+            main_window.photo.drawPlano(puntos['IIS'], puntos['AII'])
 
     if(puntos['Po'] != None):
         if('Or' in puntos):
             planos['Po-Or'] = calcularDistancia(puntos['Po'], puntos['Or'])
+            main_window.photo.drawPlano(puntos['Po'], puntos['Or'])
     
     if(puntos['Pg\''] != None):
         if(puntos['Prn'] != None):
             planos['Linea S'] = calcularDistancia(puntos['Pg\''], puntos['Prn'])
+            main_window.photo.drawPlano(puntos['Pg\''], puntos['Prn'])
             if(puntos['LS'] != None):
                 m1, b1 = encontrarEcuacion(puntos['Pg\''],puntos['Prn'])
                 m2, b2 = encontrarPerpendicular(m1,b1, puntos['LS'])
                 x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
                 P = (x, y)
                 planos['(Pg\' - Prn) - LS'] = calcularDistancia(P, puntos['LS'])
+                main_window.photo.drawPlano(P, puntos['LS'])
 
             if(puntos['LS'] != None):
                 m1, b1 = encontrarEcuacion(puntos['Pg\''],puntos['Prn'])
@@ -302,6 +321,7 @@ def calcularPlanos2(puntos, planos):
                 x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
                 P = (x, y)
                 planos['(Pg\' - Prn) - LI'] = calcularDistancia(P, puntos['LI'])
+                main_window.photo.drawPlano(P, puntos['LI'])
 
     # print(planos)
     return planos;
@@ -313,6 +333,7 @@ def calcularAngulos():
             distanciaSA = calcularDistancia(puntos['A'], puntos['S'])
             # El punto de steiner N será el punto A de la función
             angulos['SNA'] = calcularAngulo(planos['SN'], distanciaSA, planos['NA'])
+
             angulosContador += 1
         if('NB' in planos):
             distanciaSB = calcularDistancia(puntos['B'], puntos['S'])
@@ -359,18 +380,20 @@ def calcularAngulos():
     print(angulosContador)
     print(len(angulos))
 
-def calcularAngulos2(puntos,planos,angulos):
+def calcularAngulos2(puntos,planos,angulos, main_window):
     angulosContador = 0
     if('SN' in planos):
         if('NA' in planos):
             distanciaSA = calcularDistancia(puntos['A'], puntos['S'])
             # El punto de steiner N será el punto A de la función
             angulos['SNA'] = calcularAngulo(planos['SN'], distanciaSA, planos['NA'])
+            main_window.photo.drawAngulo(puntos['S'], puntos['N'], puntos['A'])
             angulosContador += 1
         if('NB' in planos):
             distanciaSB = calcularDistancia(puntos['B'], puntos['S'])
             # El punto de steiner N será el punto A de la función
             angulos['SNB'] = calcularAngulo(planos['SN'], distanciaSB, planos['NB'])
+            main_window.photo.drawAngulo(puntos['S'], puntos['N'], puntos['B'])
             angulosContador += 1
         if('ND' in planos):
             distanciaSD = calcularDistancia(puntos['D'], puntos['S'])

@@ -33,8 +33,18 @@ class Aplicacion(QMainWindow):
         self.ui.btn_reajustar.clicked.connect(self.colocarDistancia)
         self.ui.btn_calcular.clicked.connect(self.calcularSteiner)
         self.ui.btn_aceptarDistancia.clicked.connect(self.setDistancia)
+        self.ui.btn_verPlanos.clicked.connect(self.ui.photo.showPlanos)
+        self.ui.btn_verAngulos.clicked.connect(self.ui.photo.showAngulos)
+        self.ui.btn_verPuntos.clicked.connect(self.ui.photo.showPuntos)
+        self.ui.btn_descargarTrazado.clicked.connect(self.downloadTrazado)
 
         self.show()
+
+    def downloadTrazado(self):
+        if self.ui.photo.pixmap:
+            filepath, _ = QFileDialog.getSaveFileName(self, 'Guardar Pixmap', '', 'Images (*.png *.jpg)')
+            if(filepath):
+                self.ui.photo.pixmap.save(filepath)
 
     def setDistancia(self):
         self.ui.distanciaInput = self.ui.input_medida.value()
@@ -63,12 +73,17 @@ class Aplicacion(QMainWindow):
     
     def calcularSteiner(self):
         # print(f'Puntos Steiner: \n {self.ui.puntosSteiner}')
-        self.ui.planos = calcularPlanos2(self.ui.puntosSteiner, self.ui.planos)
-        self.ui.angulos = calcularAngulos2(self.ui.puntosSteiner, self.ui.planos, self.ui.angulos)
+        self.ui.planos = calcularPlanos2(self.ui.puntosSteiner, self.ui.planos, self.ui)
+        self.ui.angulos = calcularAngulos2(self.ui.puntosSteiner, self.ui.planos, self.ui.angulos, self.ui)
         for plano,valor in self.ui.planos.items():
            self.ui.planos[plano] = valor * self.ui.pixelUnidad
         print(f'Planos: \n ${self.ui.planos}')
         print(f'Angulos: \n ${self.ui.angulos}')
+        self.ui.btn_verPuntos.setEnabled(True)
+        self.ui.btn_verAngulos.setEnabled(True)
+        self.ui.btn_verPlanos.setEnabled(True)
+        self.ui.btn_descargarTrazado.setEnabled(True)
+        self.ui.btn_descargarInforme.setEnabled(True)
 
 
     def drawPoint(self,label, num_button):

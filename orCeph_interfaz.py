@@ -317,6 +317,8 @@ class PhotoLabel(QLabel):
     def setPixmap(self, *args, **kwargs):
         self.pixmap = QPixmap(*args, **kwargs)
         self.pixmap_temp = QPixmap(*args, **kwargs)
+        self.pixmapPlanos = None
+        self.pixmapAngulos = None
         self.main_window = None
         #qp = QPainter(pixmap)
         #pen = QPen(Qt.white, 5)
@@ -376,6 +378,36 @@ class PhotoLabel(QLabel):
             self.main_window.input_medida.setValue(0)
             self.main_window.btn_aceptarDistancia.setEnabled(False)
 
+    def drawPlano(self, puntoA, puntoB):
+        if(self.pixmapPlanos == None):
+            self.pixmapPlanos = QPixmap(self.pixmap)
+        self.qp = QPainter(self.pixmapPlanos)
+        self.pen = QPen(Qt.red, 9)
+        self.qp.setPen(self.pen)
+        self.qp.drawLine(puntoA[0], puntoA[1], puntoB[0], puntoB[1])
+        self.qp.end()
+
+    def drawAngulo(self,puntoA, puntoB, puntoC):
+        if(self.pixmapAngulos == None):
+            self.pixmapAngulos = QPixmap(self.pixmap)
+        self.qp = QPainter(self.pixmapAngulos)
+        self.pen = QPen(Qt.blue, 9)
+        self.qp.setPen(self.pen)
+        self.qp.drawLine(puntoA[0], puntoA[1], puntoB[0], puntoB[1])
+        self.qp.drawLine(puntoB[0], puntoB[1], puntoC[0], puntoC[1])
+        self.qp.end()
+        
+
+    def showPuntos(self):
+        super().setPixmap(self.pixmap)
+
+    def showPlanos(self):
+        super().setPixmap(self.pixmapPlanos)
+
+    def showAngulos(self):
+        super().setPixmap(self.pixmapAngulos)
+
+
     def mousePressEvent(self, event):
         if(event.buttons() & Qt.LeftButton):
             self.posicion[0] = event.pos().x()
@@ -388,7 +420,7 @@ class PhotoLabel(QLabel):
                 self.qp = QPainter(self.pixmap)
                 self.pen = QPen(Qt.white, 9)
                 self.qp.setPen(self.pen)
-                print(self.posicion)
+                #print(self.posicion)
                 self.qp.drawPoint(self.posicion[0],self.posicion[1])
                 self.qp.drawText(self.posicion[0]+5,self.posicion[1]-5, self.punto)
                 self.main_window.buttonList[self.numbutton].setText(f"({self.posicion[0]},{self.posicion[1]})")
