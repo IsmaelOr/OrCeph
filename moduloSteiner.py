@@ -208,7 +208,7 @@ def calcularPlanos():
 def calcularPlanos2(puntos, planos, main_window):
     if(puntos['Gn'] != None):
         if(puntos['Go'] != None):
-            planos['PM'] = calcularDistancia(puntos['Gn'], puntos['Go'])
+            planos['PM (Go-Gn)'] = calcularDistancia(puntos['Gn'], puntos['Go'])
             main_window.photo.drawPlano(puntos['Gn'], puntos['Go'])
 
         if(puntos['Pt'] != None):
@@ -308,7 +308,7 @@ def calcularPlanos2(puntos, planos, main_window):
                 m2, b2 = encontrarPerpendicular(m1,b1, puntos['LS'])
                 x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
                 P = (x, y)
-                planos['(Pg\' - Prn) - LS'] = calcularDistancia(P, puntos['LS'])
+                planos['(Pg\'-Prn)-LS'] = calcularDistancia(P, puntos['LS'])
                 main_window.photo.drawPlano(P, puntos['LS'])
 
             if(puntos['LS'] != None):
@@ -316,7 +316,7 @@ def calcularPlanos2(puntos, planos, main_window):
                 m2, b2 = encontrarPerpendicular(m1,b1, puntos['LI'])
                 x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
                 P = (x, y)
-                planos['(Pg\' - Prn) - LI'] = calcularDistancia(P, puntos['LI'])
+                planos['(Pg\'-Prn)-LI'] = calcularDistancia(P, puntos['LI'])
                 main_window.photo.drawPlano(P, puntos['LI'])
 
     # print(planos)
