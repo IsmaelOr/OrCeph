@@ -44,7 +44,7 @@ class Aplicacion(QMainWindow):
 
     def downloadTrazado(self):
         if self.ui.photo.pixmap:
-            filepath, _ = QFileDialog.getSaveFileName(self, 'Guardar Pixmap', '', 'Images (*.png *.jpg)')
+            filepath, _ = QFileDialog.getSaveFileName(self, 'Guardar Pixmap', 'Trazado', 'Images (*.png *.jpg)')
             if(filepath):
                 self.ui.photo.pixmap.save(filepath)
 
@@ -195,7 +195,9 @@ class Aplicacion(QMainWindow):
                 pdf.multi_cell(w=39, h=8, txt=f"{datos_angulos[i][5]}", border=1, align= 'C', fill = 1)
             else:
                 pdf.multi_cell(w=39, h=8, txt=f"{datos_angulos[i][5]}", border=1, align= 'C', fill = 0)
-        pdf.output('InformedeResultados.pdf')
+        filepath, _ = QFileDialog.getSaveFileName(self, 'Guardar Informe de Resultados', 'Informe de Resultados', 'PDF (*.pdf)')
+        if(filepath):
+            pdf.output(filepath)
 
 
     def drawPoint(self,label, num_button):

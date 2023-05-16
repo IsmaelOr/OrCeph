@@ -473,5 +473,5 @@ def calcularAngulos2(puntos,planos,angulos, main_window):
 
 #print(encontrarAngulo(puntosPrueba['P1C'],puntosPrueba['P2C'],puntosPrueba['P3C'],puntosPrueba['P4C']))
 
-calcularPlanos()
-calcularAngulos()
+#calcularPlanos()
+#calcularAngulos()
