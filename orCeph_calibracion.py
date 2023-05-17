@@ -43,10 +43,10 @@ class Aplicacion(QMainWindow):
         self.show()
 
     def downloadTrazado(self):
-        if self.ui.photo.pixmap:
+        if self.ui.photo.pixmapPlanos:
             filepath, _ = QFileDialog.getSaveFileName(self, 'Guardar Pixmap', 'Trazado', 'Images (*.png *.jpg)')
             if(filepath):
-                self.ui.photo.pixmap.save(filepath)
+                self.ui.photo.pixmapPlanos.save(filepath)
 
     def setDistancia(self):
         self.ui.distanciaInput = self.ui.input_medida.value()

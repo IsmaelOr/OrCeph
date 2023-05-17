@@ -177,7 +177,7 @@ class Ui_MainWindow(object):
         self.btn_descargarInforme = QtWidgets.QPushButton(self.centralwidget)
         self.btn_descargarInforme.setGeometry(QtCore.QRect(width - 300, 900, 281, 41))
         self.btn_descargarInforme.setObjectName("btn_descargarInforme")
-        self.btn_descargarInforme.setEnabled(True)
+        self.btn_descargarInforme.setEnabled(False)
 
         self.btn_descargarTrazado = QtWidgets.QPushButton(self.centralwidget)
         self.btn_descargarTrazado.setGeometry(QtCore.QRect(width - 300, 950, 281, 41))
