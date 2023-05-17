@@ -13,6 +13,7 @@ import sys
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
+from portada import Ui_Form
 
 
 class Ui_MainWindow(object):
@@ -258,7 +259,13 @@ class Ui_MainWindow(object):
         self.btn_buscar = QtWidgets.QPushButton(self.widget1)
         self.btn_buscar.setObjectName("btn_buscar")
         self.horizontalLayout_2.addWidget(self.btn_buscar, 2)
-        MainWindow.setCentralWidget(self.centralwidget)
+        stack = QStackedWidget()
+        MainWindow.setStyleSheet("background:white")
+        self.portada = Portada(stack, width, height, MainWindow)
+        stack.addWidget(self.portada)
+        stack.addWidget(self.centralwidget)
+        stack.setCurrentIndex(0)
+        MainWindow.setCentralWidget(stack)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1086, 21))
         self.menubar.setObjectName("menubar")
@@ -294,6 +301,36 @@ class Ui_MainWindow(object):
         self.btn_verPlanos.setText(_translate("MainWindow", "Visualizar Planos"))
         self.btn_verAngulos.setText(_translate("MainWindow", "Visualizar Angulos"))
         self.btn_verPuntos.setText(_translate("MainWindow", "Recolocar Puntos"))
+
+
+# class Portada(QWidget):
+#     def __init__(self, MainWindow, stack):
+#         super().__init__()
+#         self.stack = stack
+#         layout = QVBoxLayout()
+#         layout.setAlignment(Qt.AlignHCenter)
+#         label = QLabel("Bienvenido a OrCeph")
+#         layout.addWidget(label)
+#         spacer_top = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+#         layout.addItem(spacer_top)
+#         button = QPushButton("Iniciar")
+#         button.clicked.connect(self.next_screen)
+#         layout.addWidget(button)
+#         spacer_bottom = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+#         layout.addItem(spacer_bottom)
+#         self.setLayout(layout)
+
+class Portada(QtWidgets.QWidget):
+    def __init__(self, stack, width, height, MainWindow, parent=None):
+        super().__init__(parent)
+        self.main_window = MainWindow
+        self.ui = Ui_Form()
+        self.ui.setupUi(self, stack, width, height)
+        self.ui.pushButton.clicked.connect(self.changePage)
+    def changePage(self):
+        self.main_window.setStyleSheet("background: None")
+        self.ui.stack.setCurrentIndex(1)
+
 
 class PhotoLabel(QLabel):
 

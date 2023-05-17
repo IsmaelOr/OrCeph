@@ -9,8 +9,6 @@ from PyQt5.QtCore import Qt
 from orCeph_interfaz import Ui_MainWindow
 from functools import partial
 from fpdf import FPDF
-
-
 from moduloSteiner import calcularPlanos2, calcularAngulos2
 
 class Aplicacion(QMainWindow):
@@ -21,6 +19,8 @@ class Aplicacion(QMainWindow):
 
     def inicializar_gui(self, width, height):
         print(width, height)
+        self.setWindowTitle("Portada")
+        
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self, width, height)
         
@@ -241,6 +241,7 @@ def main():
     desktop = app.desktop()
     size_screen = desktop.screenGeometry()
     print(size_screen.width(), size_screen.height())
+    
     ventana = Aplicacion(size_screen.width(), size_screen.height())
 
     sys.exit(app.exec_())

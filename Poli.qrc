@@ -1,0 +1,7 @@
+<RCC>
+  <qresource prefix="Politecnico">
+    <file>Logo Steiner.jpg</file>
+    <file>Poli.png</file>
+    <file>Escom.png</file>
+  </qresource>
+</RCC>
