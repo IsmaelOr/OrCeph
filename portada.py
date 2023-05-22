@@ -41,7 +41,7 @@ class Ui_Form(object):
         self.pushButton.setStyleSheet("")
         self.pushButton.setObjectName("pushButton")
         self.label_4 = QtWidgets.QLabel(Form)
-        self.label_4.setGeometry(QtCore.QRect(width-300, height-120, 291, 16))
+        self.label_4.setGeometry(QtCore.QRect(width-350, height-120, 350, 16))
         self.label_4.setObjectName("label_4")
         self.label_5 = QtWidgets.QLabel(Form)
         self.label_5.setGeometry(QtCore.QRect(width-200, 20, 71, 81))
@@ -72,6 +72,6 @@ class Ui_Form(object):
         self.label.setText(_translate("Form", "<html><head/><body><p align=\"center\">OrCeph</p></body></html>"))
         self.label_2.setText(_translate("Form", "<html><head/><body><p align=\"center\">Analizador Cefalométrico de Steiner</p></body></html>"))
         self.pushButton.setText(_translate("Form", "Iniciar"))
-        self.label_4.setText(_translate("Form", "© Ismael Ortega Estrada. Todos los derechos reservados."))
+        self.label_4.setText(_translate("Form", "© Ismael Ortega Estrada, IPN ESCOM. Todos los derechos reservados."))
 
 import Poli_rc

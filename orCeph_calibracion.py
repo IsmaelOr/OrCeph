@@ -10,6 +10,7 @@ from orCeph_interfaz import Ui_MainWindow
 from functools import partial
 from fpdf import FPDF
 from moduloSteiner import calcularPlanos2, calcularAngulos2
+from datetime import datetime
 
 class Aplicacion(QMainWindow):
     def __init__(self, width, height):
@@ -81,6 +82,7 @@ class Aplicacion(QMainWindow):
            self.ui.planos[plano] = valor * self.ui.pixelUnidad
         print(f'Planos: \n ${self.ui.planos}')
         print(f'Angulos: \n ${self.ui.angulos}')
+        self.ui.photo.pixmapPlanos.save("tempTrazado.png", "PNG")
         self.ui.btn_verPuntos.setEnabled(True)
         self.ui.btn_verAngulos.setEnabled(True)
         self.ui.btn_verPlanos.setEnabled(True)
@@ -119,10 +121,11 @@ class Aplicacion(QMainWindow):
         ]
         
         print(f'Creando PDF')
-        pdf = FPDF(orientation='P', unit='mm', format='A4')
+        pdf = PDF(orientation='P', unit='mm', format='A4')
         pdf.add_page()
-        pdf.set_font('times', '', 8)
+        pdf.set_font('times', 'B', 10)
         pdf.multi_cell(w=0, h=10, txt="Planos o Segmentos cefalométricos", border=1, align= 'C', fill = 0)
+        pdf.set_font('times', 'B', 7)
         pdf.cell(w=10, h=10, txt="Número", border=1, align= 'C', fill = 0)
         pdf.cell(w=25, h=10, txt="Plano", border=1, align= 'C', fill = 0)
         pdf.cell(w=20, h=10, txt="Valor Normal", border=1, align= 'C', fill = 0)
@@ -132,10 +135,11 @@ class Aplicacion(QMainWindow):
         pdf.cell(w=38, h=5, txt="Disminuido", border=1, align= 'C', fill = 0)
         pdf.cell(w=38, h=5, txt="Normal", border=1, align= 'C', fill = 0)
         pdf.multi_cell(w=39, h=5, txt="Aumentado", border=1, align= 'C', fill = 0)
+        pdf.set_font('times', '', 8)
         for i in range(0,13):
             pdf.cell(w=10, h=8, txt=f"{i+1}", border=1, align= 'C', fill = 0)
             pdf.cell(w=25, h=8, txt=f"{datos_planos[i]}", border=1, align= 'C', fill = 0)
-            pdf.cell(w=20, h=8, txt=f"-", border=1, align= 'C', fill = 0)
+            pdf.cell(w=20, h=8, txt=f"No aplica", border=1, align= 'C', fill = 0)
             if(datos_planos[i] in planos):
                 pdf.cell(w=20, h=8, txt=f'{planos[datos_planos[i]]:.2f}mm', border=1, align= 'C', fill = 0)
             else:
@@ -164,7 +168,9 @@ class Aplicacion(QMainWindow):
             else:
                 pdf.multi_cell(w=39, h=8, txt=f"{datos_planos[i][5]}", border=1, align= 'C', fill = 0)
         pdf.add_page()
+        pdf.set_font('times', 'B', 10)
         pdf.multi_cell(w=0, h=10, txt="Ángulos cefalométricos", border=1, align= 'C', fill = 0)
+        pdf.set_font('times', 'B', 7)
         pdf.cell(w=10, h=10, txt="Número", border=1, align= 'C', fill = 0)
         pdf.cell(w=25, h=10, txt="Ángulo", border=1, align= 'C', fill = 0)
         pdf.cell(w=20, h=10, txt="Valor Normal", border=1, align= 'C', fill = 0)
@@ -174,6 +180,7 @@ class Aplicacion(QMainWindow):
         pdf.cell(w=38, h=5, txt="Disminuido", border=1, align= 'C', fill = 0)
         pdf.cell(w=38, h=5, txt="Normal", border=1, align= 'C', fill = 0)
         pdf.multi_cell(w=39, h=5, txt="Aumentado", border=1, align= 'C', fill = 0)
+        pdf.set_font('times', '', 8)
         for i in range(0,15):
             pdf.cell(w=10, h=8, txt=f"{i+1}", border=1, align= 'C', fill = 0)
             pdf.cell(w=25, h=8, txt=f"{datos_angulos[i][0]}", border=1, align= 'C', fill = 0)
@@ -195,6 +202,10 @@ class Aplicacion(QMainWindow):
                 pdf.multi_cell(w=39, h=8, txt=f"{datos_angulos[i][5]}", border=1, align= 'C', fill = 1)
             else:
                 pdf.multi_cell(w=39, h=8, txt=f"{datos_angulos[i][5]}", border=1, align= 'C', fill = 0)
+        pdf.add_page()
+        pdf.set_font('times', 'B', 12)
+        pdf.multi_cell(w=0,h=16, txt="Trazado de planos cefalométricos", border=0, align= 'C', fill = 0)
+        pdf.image("tempTrazado.png", x=10, y=25, w=190, h=231)
         filepath, _ = QFileDialog.getSaveFileName(self, 'Guardar Informe de Resultados', 'Informe de Resultados', 'PDF (*.pdf)')
         if(filepath):
             pdf.output(filepath)
@@ -234,6 +245,13 @@ class Aplicacion(QMainWindow):
         self.ui.lbl_indicacion.setText("Presione el botón 'Colocar distancia'.")
 
 
+class PDF(FPDF):
+    def footer(self):
+        self.set_y(-15)
+        self.set_font('Arial', 'I', 8)
+        current_datetime = datetime.now()
+        datetime_string = current_datetime.strftime("%d-%m-%Y %H:%M:%S")
+        self.cell(0,10, f'Fecha y Hora: {datetime_string}', 0, 0, 'R')
 
 
 def main():

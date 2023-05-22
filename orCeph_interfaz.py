@@ -419,7 +419,7 @@ class PhotoLabel(QLabel):
         if(self.pixmapPlanos == None):
             self.pixmapPlanos = QPixmap(self.pixmap)
         self.qp = QPainter(self.pixmapPlanos)
-        self.pen = QPen(Qt.red, 9)
+        self.pen = QPen(QColor(242,192,50), 5)
         self.qp.setPen(self.pen)
         self.qp.drawLine(puntoA[0], puntoA[1], puntoB[0], puntoB[1])
         self.qp.end()
@@ -428,7 +428,7 @@ class PhotoLabel(QLabel):
         if(self.pixmapAngulos == None):
             self.pixmapAngulos = QPixmap(self.pixmap)
         self.qp = QPainter(self.pixmapAngulos)
-        self.pen = QPen(Qt.blue, 9)
+        self.pen = QPen(Qt.blue, 5)
         self.qp.setPen(self.pen)
         self.qp.drawLine(puntoA[0], puntoA[1], puntoB[0], puntoB[1])
         self.qp.drawLine(puntoB[0], puntoB[1], puntoC[0], puntoC[1])
@@ -455,7 +455,7 @@ class PhotoLabel(QLabel):
             if(self.distancia == False and self.punto != "" and self.main_window != None and self.main_window.puntosSteiner[self.punto] == None):
                 print("Punto seleccionado")
                 self.qp = QPainter(self.pixmap)
-                self.pen = QPen(Qt.white, 9)
+                self.pen = QPen(QColor(57,255,20), 9)
                 self.qp.setPen(self.pen)
                 #print(self.posicion)
                 self.qp.drawPoint(self.posicion[0],self.posicion[1])
@@ -480,7 +480,7 @@ class PhotoLabel(QLabel):
                         bg_color = QColor(self.pixmap_temp.toImage().pixel(i, j))
                         self.qp.setPen(QPen(bg_color, 1))
                         self.qp.drawPoint(i,j)
-                self.pen = QPen(Qt.white, 9)
+                self.pen = QPen(QColor(57,255,20), 9)
                 self.qp.setPen(self.pen)
                 self.qp.drawPoint(self.posicion[0],self.posicion[1])
                 self.qp.drawText(self.posicion[0]+10,self.posicion[1]-5, self.punto)
@@ -522,3 +522,5 @@ class PhotoLabel(QLabel):
                 # self.qp.fillRect(rect, bg_color)
                 # self.qp.end()
                 # super().setPixmap(self.pixmap)
+
+
