@@ -413,13 +413,11 @@ def calcularAngulos2(puntos,planos,angulos, main_window):
             distanciaSA = calcularDistancia(puntos['A'], puntos['S'])
             # El punto de steiner N será el punto A de la función
             angulos['SNA'] = calcularAngulo(planos['SN'], distanciaSA, planos['NA'])
-            main_window.photo.drawAngulo(puntos['S'], puntos['N'], puntos['A'])
             angulosContador += 1
         if('NB' in planos):
             distanciaSB = calcularDistancia(puntos['B'], puntos['S'])
             # El punto de steiner N será el punto A de la función
             angulos['SNB'] = calcularAngulo(planos['SN'], distanciaSB, planos['NB'])
-            main_window.photo.drawAngulo(puntos['S'], puntos['N'], puntos['B'])
             angulosContador += 1
         if('ND' in planos):
             distanciaSD = calcularDistancia(puntos['D'], puntos['S'])

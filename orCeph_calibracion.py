@@ -1,16 +1,18 @@
 import sys
-
+import atexit
 from PyQt5 import QtWidgets, QtGui
 from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from PyQt5.QtGui import QPainter, QPen
 from PyQt5.QtCore import Qt
+from PyQt5.QtGui import QScreen
 from orCeph_interfaz import Ui_MainWindow
 from functools import partial
 from fpdf import FPDF
 from moduloSteiner import calcularPlanos2, calcularAngulos2
 from datetime import datetime
+import os
 
 class Aplicacion(QMainWindow):
     def __init__(self, width, height):
@@ -19,6 +21,7 @@ class Aplicacion(QMainWindow):
         self.inicializar_gui(width, height)
 
     def inicializar_gui(self, width, height):
+        self.pdf = None
         print(width, height)
         self.setWindowTitle("Portada")
         
@@ -37,11 +40,24 @@ class Aplicacion(QMainWindow):
         self.ui.btn_calcular.clicked.connect(self.calcularSteiner)
         self.ui.btn_aceptarDistancia.clicked.connect(self.setDistancia)
         self.ui.btn_verPlanos.clicked.connect(self.ui.photo.showPlanos)
-        self.ui.btn_verAngulos.clicked.connect(self.ui.photo.showAngulos)
+        #self.ui.btn_verAngulos.clicked.connect(self.ui.photo.showAngulos)
         self.ui.btn_verPuntos.clicked.connect(self.ui.photo.showPuntos)
         self.ui.btn_descargarTrazado.clicked.connect(self.downloadTrazado)
-        self.ui.btn_descargarInforme.clicked.connect(partial(self.crearInforme, self.ui.puntosSteiner, self.ui.planos, self.ui.angulos))
+        #self.ui.btn_descargarInforme.clicked.connect(partial(self.crearInforme, self.ui.puntosSteiner, self.ui.planos, self.ui.angulos))
+        self.ui.btn_descargarInforme.clicked.connect(self.downloadInforme)
+        self.ui.btn_verResultados.clicked.connect(self.showResultados)
         self.show()
+
+    def showResultados(self):
+        current_directory = os.path.dirname(os.path.abspath(__file__))
+        self.ui.web_view.load(QUrl.fromLocalFile(f"{current_directory}/tempInforme.pdf"))
+        self.ui.widget_5.hide()
+        self.ui.widget_13.show()
+
+    def downloadInforme(self):
+        filepath, _ = QFileDialog.getSaveFileName(self, 'Guardar Informe de Resultados', 'Informe de Resultados', 'PDF (*.pdf)')
+        if(filepath):
+            self.pdf.output(filepath)
 
     def downloadTrazado(self):
         if self.ui.photo.pixmapPlanos:
@@ -84,11 +100,12 @@ class Aplicacion(QMainWindow):
         print(f'Angulos: \n ${self.ui.angulos}')
         self.ui.photo.pixmapPlanos.save("tempTrazado.png", "PNG")
         self.ui.btn_verPuntos.setEnabled(True)
-        self.ui.btn_verAngulos.setEnabled(True)
+        self.ui.btn_verResultados.setEnabled(True)
         self.ui.btn_verPlanos.setEnabled(True)
         self.ui.btn_descargarTrazado.setEnabled(True)
         #informe_pdf = self.crearInforme(self.ui.puntosSteiner, self.ui.planos, self.ui.angulos)
         self.ui.btn_descargarInforme.setEnabled(True)
+        self.pdf = self.crearInforme(self.ui.puntosSteiner, self.ui.planos, self.ui.angulos)
 
     def crearInforme(self,puntos, planos, angulos):
         datos_planos = [
@@ -108,7 +125,7 @@ class Aplicacion(QMainWindow):
             ['SND', 76, 2, 'Progenismo', 'Normal', 'Retrogenismo'],
             ['ANB', 2, 2, 'Clase III', 'Clase I', 'Clase II'],
             ['PO-SN', 14, 1, 'Mordida abierta', 'Normal', 'Mordida cerrada'],
-            ['(Go-Gn)-(S-N)', 32, 1, 'Crecimiento vertical', 'Mesofacial', 'Crecimiento horizontal'],
+            ['(Go-Gn)-(S-N)', 32, 2, 'Crecimiento vertical', 'Mesofacial', 'Crecimiento horizontal'],
             ['(IIS-AIS)-(N-A)', 22, 1, 'Proinclinación Incisiva', 'Normal', 'Retroinclinación Incisiva'],
             ['(III-AII)-(N-A)', 25, 1, 'Proinclinación Incisiva', 'Normal', 'Retroinclinación Incisiva'],
             ['(III-AII)-(IIS-AIS)', 130,1, 'Protusión dentaria', 'Normal', 'Mordida cerrada'],
@@ -119,9 +136,43 @@ class Aplicacion(QMainWindow):
             ['(ENA-ENP)-(Go-Gn)', 5,2, 'Inclinación mordida abierta', 'Normal', 'Inclinación mordida cerrada'],
             ['(Po-Or)-(Go-Gn)', 1, 6, 'Inclinación mordida cerrada', 'Normal', 'Inclinación mordida abierta']
         ]
+
+        analisis_esqueletico = [
+            ['SNA', 82, 2, 'Prognatismo', 'Normal', 'Retrognatismo'],
+            ['(ENA-ENP)-(Go-Gn)', 5, 2, 'Inclinación mordida abierta', 'Normal', 'Inclinación mordida cerrada'],
+            ['SNB', 80, 2, 'Prognatismo', 'Normal', 'Retrognatismo'],
+            ['SND', 77, 2, 'Progenismo', 'Normal', 'Retrogenismo'],
+            ['Silla-L', 51, 2, 'Posición adelatanda mandíbula', 'Ortognático', 'Posición atrasada mandíbula'],
+            ['Silla-E', 22, 2, 'Posición atrasada del condílo', 'Ortognática', 'Posición adelantada del cóndilo'],
+            ['(Ar-Go)-(Go-Me)', 125, 5, 'Crecimiento vertical', 'Mesofacial', 'Crecimiento horizontal'],
+            ['(Go-Gn)-(S-N)', 32, 2, 'Crecimiento vertical', 'Mesofacial', 'Crecimiento horizontal'],
+            ['ANB', 2, 2, 'Clase III', 'Clase I', 'Clase II']
+        ]
         
         print(f'Creando PDF')
         pdf = PDF(orientation='P', unit='mm', format='A4')
+        # PORTADA
+        pdf.add_page()
+        pdf.set_font('times', 'B', 25)
+        pdf.multi_cell(w=0, h=25, txt="Reporte generado por OrCeph", border=0, align= 'C', fill = 0)
+        pdf.image("Logo Steiner.jpg", x=55, y=30, w=100, h=109)
+        pdf.set_font('times', 'B', 8)
+        pdf.set_y(140)
+        pdf.multi_cell(w=0, h=15, txt="© Ismael Ortega Estrada, IPN ESCOM. Todos los derechos reservados.", border=0, align= 'C', fill = 0)
+        pdf.set_font('times', 'B', 20)
+        pdf.multi_cell(w=0, h=20, txt="Datos del Paciente:", border=0, align= 'L', fill = 0)
+        pdf.set_font('times', 'B', 15)
+        pdf.cell(w=30, h=20, txt="Nombre:", border=0, align= 'L', fill = 0)
+        nombre = self.ui.input_nombreP.text() if self.ui.input_nombreP.text() else '____________________________________'  
+        pdf.multi_cell(w=0, h=20, txt=f"{nombre}", border=0, align= 'L', fill = 0)
+        pdf.cell(w=30, h=20, txt="Edad:", border=0, align= 'L', fill = 0)
+        edad = self.ui.input_edad.value() if self.ui.input_edad.value() != 0 else '____________________________________'
+        pdf.multi_cell(w=0, h=20, txt=f"{edad}", border=0, align= 'L', fill = 0)
+        pdf.cell(w=30, h=20, txt="Sexo:", border=0, align= 'L', fill = 0)
+        sexo = self.ui.select_sexo.currentText() if self.ui.select_sexo.currentText() != '' else '____________________________________'  
+        pdf.multi_cell(w=0, h=20, txt=f"{sexo}", border=0, align= 'L', fill = 0)
+        
+        # TABLA DE PLANOS
         pdf.add_page()
         pdf.set_font('times', 'B', 10)
         pdf.multi_cell(w=0, h=10, txt="Planos o Segmentos cefalométricos", border=1, align= 'C', fill = 0)
@@ -167,6 +218,8 @@ class Aplicacion(QMainWindow):
                 pdf.multi_cell(w=39, h=8, txt=f"{datos_planos[i][5]}", border=1, align= 'C', fill = 1)
             else:
                 pdf.multi_cell(w=39, h=8, txt=f"{datos_planos[i][5]}", border=1, align= 'C', fill = 0)
+        
+        # TABLA DE ÁNGULOS
         pdf.add_page()
         pdf.set_font('times', 'B', 10)
         pdf.multi_cell(w=0, h=10, txt="Ángulos cefalométricos", border=1, align= 'C', fill = 0)
@@ -202,13 +255,21 @@ class Aplicacion(QMainWindow):
                 pdf.multi_cell(w=39, h=8, txt=f"{datos_angulos[i][5]}", border=1, align= 'C', fill = 1)
             else:
                 pdf.multi_cell(w=39, h=8, txt=f"{datos_angulos[i][5]}", border=1, align= 'C', fill = 0)
+        
+        pdf.multi_cell(w=0, h=10, txt=f"", border=0, align= 'L', fill = 0)
+        pdf.set_font('times', 'B', 12)
+        pdf.multi_cell(w=0, h=15, txt=f"Datos del Doctor: ", border=0, align= 'L', fill = 0)
+        pdf.set_font('times', 'B', 10)
+        nombre_doctor = self.ui.input_nombreD.text() if self.ui.input_nombreD.text() else '____________________________________'
+        pdf.cell(w=pdf.w/2, h=11, txt=f"Nombre: {nombre_doctor}", border=0, align= 'L', fill = 0)
+        cedula = self.ui.input_cedula.text() if self.ui.input_cedula.text() else '____________________________________'
+        pdf.multi_cell(w=pdf.w/2, h=11, txt=f"Cédula: {cedula}", border=0, align= 'L', fill = 0)
         pdf.add_page()
         pdf.set_font('times', 'B', 12)
         pdf.multi_cell(w=0,h=16, txt="Trazado de planos cefalométricos", border=0, align= 'C', fill = 0)
         pdf.image("tempTrazado.png", x=10, y=25, w=190, h=231)
-        filepath, _ = QFileDialog.getSaveFileName(self, 'Guardar Informe de Resultados', 'Informe de Resultados', 'PDF (*.pdf)')
-        if(filepath):
-            pdf.output(filepath)
+        pdf.output("tempInforme.pdf")
+        return pdf
 
 
     def drawPoint(self,label, num_button):
@@ -254,6 +315,13 @@ class PDF(FPDF):
         self.cell(0,10, f'Fecha y Hora: {datetime_string}', 0, 0, 'R')
 
 
+def delete_file_on_exit():
+        current_directory = os.path.dirname(os.path.abspath(__file__))
+        if os.path.isfile(f"{current_directory}/tempInforme.pdf"):
+            os.remove(f"{current_directory}/tempInforme.pdf")
+        if os.path.isfile(f"{current_directory}/tempTrazado.png"):
+            os.remove(f"{current_directory}/tempTrazado.png")
+
 def main():
     app = QApplication(sys.argv)
     desktop = app.desktop()
@@ -261,7 +329,7 @@ def main():
     print(size_screen.width(), size_screen.height())
     
     ventana = Aplicacion(size_screen.width(), size_screen.height())
-
+    atexit.register(delete_file_on_exit)
     sys.exit(app.exec_())
 
 if __name__ == "__main__":

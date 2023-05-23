@@ -14,6 +14,8 @@ from PyQt5.QtWidgets import *
 from PyQt5.QtCore import *
 from PyQt5.QtGui import *
 from portada import Ui_Form
+from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineSettings
+from PyQt5.QtCore import QUrl
 
 
 class Ui_MainWindow(object):
@@ -82,9 +84,120 @@ class Ui_MainWindow(object):
         MainWindow.setMaximumSize(QtCore.QSize(16777215, 16777215))
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
+
+        self.widget_10 = QtWidgets.QWidget(self.centralwidget)
+        self.widget_10.setGeometry(QtCore.QRect(width-1220, 10, 250, 10))
+        self.widget_10.setObjectName("widget_10")
+        self.horizontalLayout_7 = QtWidgets.QHBoxLayout(self.widget_10)
+        self.horizontalLayout_7.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_7.setObjectName("horizontalLayout_7")
+        self.lbl_doctor = QtWidgets.QLabel(self.widget_10)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lbl_doctor.setFont(font)
+        self.lbl_doctor.setObjectName("lbl_doctor")
+        self.horizontalLayout_7.addWidget(self.lbl_doctor)
+
+        self.widget_11 = QtWidgets.QWidget(self.centralwidget)
+        self.widget_11.setGeometry(QtCore.QRect(width-950, 10, 250, 10))
+        self.widget_11.setObjectName("widget_11")
+        self.horizontalLayout_8 = QtWidgets.QHBoxLayout(self.widget_11)
+        self.horizontalLayout_8.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_8.setObjectName("horizontalLayout_8")
+        self.lbl_paciente = QtWidgets.QLabel(self.widget_11)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lbl_paciente.setFont(font)
+        self.lbl_paciente.setObjectName("lbl_paciente")
+        self.horizontalLayout_8.addWidget(self.lbl_paciente)
+
+        self.widget_12 = QtWidgets.QWidget(self.centralwidget)
+        self.widget_12.setGeometry(QtCore.QRect(width-675, 10, 250, 15))
+        self.widget_12.setObjectName("widget_12")
+        self.horizontalLayout_9 = QtWidgets.QHBoxLayout(self.widget_12)
+        self.horizontalLayout_9.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_9.setObjectName("horizontalLayout_9")
+        self.lbl_imagen = QtWidgets.QLabel(self.widget_12)
+        font = QtGui.QFont()
+        font.setPointSize(8)
+        font.setBold(True)
+        font.setWeight(75)
+        self.lbl_imagen.setFont(font)
+        self.lbl_imagen.setObjectName("lbl_imagen")
+        self.horizontalLayout_9.addWidget(self.lbl_imagen)
+
+        self.widget_8 = QtWidgets.QWidget(self.centralwidget)
+        self.widget_8.setGeometry(QtCore.QRect(width-1220, 25, 250, 25))
+        self.widget_8.setObjectName("widget_8")
+        self.horizontalLayout_5 = QtWidgets.QHBoxLayout(self.widget_8)
+        self.horizontalLayout_5.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_5.setObjectName("horizontalLayout_5")
+        self.lbl_nombreD = QtWidgets.QLabel(self.widget_8)
+        self.lbl_nombreD.setObjectName("lbl_nombreD")
+        self.horizontalLayout_5.addWidget(self.lbl_nombreD)
+        self.input_nombreD = QtWidgets.QLineEdit(self.widget_8)
+        self.input_nombreD.setObjectName("input_nombreD")
+        self.horizontalLayout_5.addWidget(self.input_nombreD, 2)
+
+        self.widget_9 = QtWidgets.QWidget(self.centralwidget)
+        self.widget_9.setGeometry(QtCore.QRect(width-1220, 50, 250, 38))
+        self.widget_9.setObjectName("widget_9")
+        self.horizontalLayout_6 = QtWidgets.QHBoxLayout(self.widget_9)
+        self.horizontalLayout_6.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_6.setObjectName("horizontalLayout_6")
+        self.lbl_cedula = QtWidgets.QLabel(self.widget_9)
+        self.lbl_cedula.setObjectName("lbl_cedula")
+        self.horizontalLayout_6.addWidget(self.lbl_cedula)
+        self.input_cedula = QtWidgets.QLineEdit(self.widget_9)
+        self.input_cedula.setObjectName("input_ceduña")
+        self.horizontalLayout_6.addWidget(self.input_cedula, 2)
+
+
+        self.widget_7 = QtWidgets.QWidget(self.centralwidget)
+        self.widget_7.setGeometry(QtCore.QRect(width-950, 25, 250, 25))
+        self.widget_7.setObjectName("widget_7")
+        self.horizontalLayout_4 = QtWidgets.QHBoxLayout(self.widget_7)
+        self.horizontalLayout_4.setContentsMargins(0, 0, 0, 0)
+        self.horizontalLayout_4.setObjectName("horizontalLayout_4")
+        self.lbl_nombreP = QtWidgets.QLabel(self.widget_7)
+        self.lbl_nombreP.setObjectName("lbl_nombreP")
+        self.horizontalLayout_4.addWidget(self.lbl_nombreP)
+        self.input_nombreP = QtWidgets.QLineEdit(self.widget_7)
+        self.input_nombreP.setObjectName("input_nombreP")
+        self.horizontalLayout_4.addWidget(self.input_nombreP, 2)
+
+
+        self.widget_6 = QtWidgets.QWidget(self.centralwidget)
+        self.widget_6.setGeometry(QtCore.QRect(width - 950, 50, 250, 38))
+        #self.widget_6.setStyleSheet('background:red')
+        self.horizontalLayout3 = QtWidgets.QHBoxLayout(self.widget_6)
+        self.horizontalLayout3.setContentsMargins(0,0,0,0)
+        self.horizontalLayout3.setObjectName("horizontalLayout3")
+        self.lbl_edad = QtWidgets.QLabel(self.widget_6)
+        self.lbl_edad.setObjectName("lbl_edad")
+        self.horizontalLayout3.addWidget(self.lbl_edad, 1)
+        self.input_edad = QtWidgets.QSpinBox(self.widget_6)
+        self.input_edad.setObjectName("input_edad")
+        self.horizontalLayout3.addWidget(self.input_edad, 2)
+        self.lbl_sexo = QtWidgets.QLabel(self.widget_6)
+        self.lbl_sexo.setObjectName("lbl_sexo")
+        self.horizontalLayout3.addWidget(self.lbl_sexo, 1)
+        self.select_sexo = QtWidgets.QComboBox(self.widget_6)
+        self.select_sexo.setObjectName("select_unidad")
+        self.select_sexo.addItem("")
+        self.select_sexo.addItem("")
+        self.select_sexo.addItem("")
+        self.horizontalLayout3.addWidget(self.select_sexo, 4)
+
+
         self.widget_2 = QtWidgets.QWidget(self.centralwidget)
-        self.widget_2.setGeometry(QtCore.QRect(width - 725, 50, 400, 38))
+        self.widget_2.setGeometry(QtCore.QRect(width - 675, 50, 350, 38))
         self.widget_2.setObjectName("widget_2")
+        #self.widget_2.setStyleSheet('background:blue')
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.widget_2)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
         self.horizontalLayout.setObjectName("horizontalLayout")
@@ -109,7 +222,7 @@ class Ui_MainWindow(object):
 
         self.widget_3 = QtWidgets.QWidget(self.centralwidget)
         #self.widget_3.setStyleSheet("background:'red'")
-        self.widget_3.setGeometry(QtCore.QRect(width - 310, 25, 300, height - 400))
+        self.widget_3.setGeometry(QtCore.QRect(width - 310, 10, 300, height - 350))
         self.widget_3.setObjectName("widget_3")
         self.lbl_lista = QtWidgets.QLabel(self.widget_3)
         self.lbl_lista.setGeometry(QtCore.QRect(10, 0, 261, 16))
@@ -142,7 +255,7 @@ class Ui_MainWindow(object):
         self.scroll = QScrollArea()
         self.scroll.setWidget(self.groupBox)
         self.scroll.setWidgetResizable(True)
-        self.scroll.setFixedHeight(height-460)
+        self.scroll.setFixedHeight(height-400)
 
         self.layout = QVBoxLayout()
         self.layout.addWidget(self.scroll)
@@ -150,40 +263,59 @@ class Ui_MainWindow(object):
         self.widget_3.setLayout(self.layout)
 
         self.btn_reajustar = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_reajustar.setGeometry(QtCore.QRect(width - 300, 700, 281, 41))
+        self.btn_reajustar.setGeometry(QtCore.QRect(width - 300, 740, 281, 41))
         self.btn_reajustar.setObjectName("btn_reajustar")
         self.btn_reajustar.setEnabled(False)
 
         self.btn_calcular = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_calcular.setGeometry(QtCore.QRect(width - 300, 750, 281, 41))
+        self.btn_calcular.setGeometry(QtCore.QRect(width - 300, 790, 281, 41))
         self.btn_calcular.setObjectName("btn_calcular")
         self.btn_calcular.setEnabled(False)
 
 
         self.btn_verPuntos = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_verPuntos.setGeometry(QtCore.QRect(width - 300, 800, 281, 41))
+        self.btn_verPuntos.setGeometry(QtCore.QRect(width - 300, 840, 281, 41))
         self.btn_verPuntos.setObjectName("btn_calcular")
         self.btn_verPuntos.setEnabled(False)
 
         self.btn_verPlanos = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_verPlanos.setGeometry(QtCore.QRect(width - 300, 850, 130, 41))
+        self.btn_verPlanos.setGeometry(QtCore.QRect(width - 300, 890, 130, 41))
         self.btn_verPlanos.setObjectName("btn_verPlanos")
         self.btn_verPlanos.setEnabled(False)
 
-        self.btn_verAngulos = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_verAngulos.setGeometry(QtCore.QRect(width - 150, 850, 130, 41))
-        self.btn_verAngulos.setObjectName("btn_verAngulos")
-        self.btn_verAngulos.setEnabled(False)
+        self.btn_descargarTrazado = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_descargarTrazado.setGeometry(QtCore.QRect(width - 150, 890, 130, 41))
+        self.btn_descargarTrazado.setObjectName("btn_descargarInforme")
+        self.btn_descargarTrazado.setEnabled(False)
+
+        self.btn_verResultados = QtWidgets.QPushButton(self.centralwidget)
+        self.btn_verResultados.setGeometry(QtCore.QRect(width - 300, 940, 130, 41))
+        self.btn_verResultados.setObjectName("btn_verResultados")
+        self.btn_verResultados.setEnabled(False)
 
         self.btn_descargarInforme = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_descargarInforme.setGeometry(QtCore.QRect(width - 300, 900, 281, 41))
+        self.btn_descargarInforme.setGeometry(QtCore.QRect(width - 150, 940, 130, 41))
         self.btn_descargarInforme.setObjectName("btn_descargarInforme")
         self.btn_descargarInforme.setEnabled(False)
 
-        self.btn_descargarTrazado = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_descargarTrazado.setGeometry(QtCore.QRect(width - 300, 950, 281, 41))
-        self.btn_descargarTrazado.setObjectName("btn_descargarInforme")
-        self.btn_descargarTrazado.setEnabled(False)
+
+        # self.btn_verAngulos = QtWidgets.QPushButton(self.centralwidget)
+        # self.btn_verAngulos.setGeometry(QtCore.QRect(width - 150, 850, 130, 41))
+        # self.btn_verAngulos.setObjectName("btn_verAngulos")
+        # self.btn_verAngulos.setEnabled(False)
+
+        ######### PDF VIEWER ######
+        self.layout_pdf = QVBoxLayout()
+        self.widget_13 = QtWidgets.QWidget(self.centralwidget)
+        self.widget_13.setGeometry(QtCore.QRect(10, 85, 1600, 900))
+        #self.widget_13.setStyleSheet("background:red")
+        self.widget_13.setLayout(self.layout_pdf)
+        self.web_view = QWebEngineView()
+        self.layout_pdf.addWidget(self.web_view)
+        self.web_view.settings().setAttribute(QWebEngineSettings.PluginsEnabled, True)
+        self.web_view.settings().setAttribute(QWebEngineSettings.PdfViewerEnabled, True)
+        self.widget_13.hide()
+
 
         self.widget_5 = QtWidgets.QWidget(self.centralwidget)
         self.widget_5.setGeometry(QtCore.QRect(-5, 85, 1620, 920))
@@ -203,30 +335,8 @@ class Ui_MainWindow(object):
         self.layout2.addWidget(self.scroll2)
         self.widget_5.setLayout(self.layout2)
 
-        # self.imagen = QtWidgets.QLabel(self.centralwidget)
-        # self.imagen.setGeometry(QtCore.QRect(30, 150, width-400, height-250))
-        # self.imagen.setObjectName("imagen")
-        # self.imagen.setStyleSheet('''
-        # QLabel {
-        #     border: 4px dashed #aaa;
-        # }''')
-
-        ### BOTONES ZOOM 
-
-        # self.btn_mas = QtWidgets.QPushButton(self.centralwidget)
-        # self.btn_mas.setGeometry(QtCore.QRect(width-350, height-580, 41, 23))
-        # self.btn_mas.setObjectName("btn_mas")
-        # self.btn_menos = QtWidgets.QPushButton(self.centralwidget)
-        # self.btn_menos.setGeometry(QtCore.QRect(width-350, height-550, 41, 23))
-        # self.btn_menos.setObjectName("btn_menos")
-        # self.lbl_zoom = QtWidgets.QLabel(self.centralwidget)
-        # self.lbl_zoom.setGeometry(QtCore.QRect(width-350, height-600, 41, 16))
-        # self.lbl_zoom.setObjectName("lbl_zoom")
-
-        ####### 
-
         self.widget = QtWidgets.QWidget(self.centralwidget)
-        self.widget.setGeometry(QtCore.QRect(30, 20, 800, 60))
+        self.widget.setGeometry(QtCore.QRect(30, 20, 650, 60))
         self.widget.setObjectName("widget")
         self.verticalLayout = QtWidgets.QVBoxLayout(self.widget)
         self.verticalLayout.setContentsMargins(0, 0, 0, 0)
@@ -248,7 +358,7 @@ class Ui_MainWindow(object):
         self.lbl_indicacion.setObjectName("lbl_indicacion")
         self.verticalLayout.addWidget(self.lbl_indicacion)
         self.widget1 = QtWidgets.QWidget(self.centralwidget)
-        self.widget1.setGeometry(QtCore.QRect(width-725, 25, 400, 25))
+        self.widget1.setGeometry(QtCore.QRect(width-675, 25, 350, 25))
         self.widget1.setObjectName("widget1")
         self.horizontalLayout_2 = QtWidgets.QHBoxLayout(self.widget1)
         self.horizontalLayout_2.setContentsMargins(0, 0, 0, 0)
@@ -259,6 +369,7 @@ class Ui_MainWindow(object):
         self.btn_buscar = QtWidgets.QPushButton(self.widget1)
         self.btn_buscar.setObjectName("btn_buscar")
         self.horizontalLayout_2.addWidget(self.btn_buscar, 2)
+
         stack = QStackedWidget()
         MainWindow.setStyleSheet("background:white")
         self.portada = Portada(stack, width, height, MainWindow)
@@ -266,6 +377,7 @@ class Ui_MainWindow(object):
         stack.addWidget(self.centralwidget)
         stack.setCurrentIndex(0)
         MainWindow.setCentralWidget(stack)
+
         self.menubar = QtWidgets.QMenuBar(MainWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 1086, 21))
         self.menubar.setObjectName("menubar")
@@ -277,6 +389,7 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
+
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "orCeph"))
@@ -285,12 +398,19 @@ class Ui_MainWindow(object):
         self.select_unidad.setItemText(1, _translate("MainWindow", "cm"))
         self.select_unidad.setItemText(2, _translate("MainWindow", "in"))
         self.lbl_lista.setText(_translate("MainWindow", "Lista de Puntos de Steiner:"))
+        self.lbl_nombreD.setText(_translate("MainWindow", "Nombre:"))
+        self.lbl_nombreP.setText(_translate("MainWindow", "Nombre:"))
+        self.lbl_cedula.setText(_translate("MainWindow", "Cedula: "))
+        self.lbl_doctor.setText(_translate("MainWindow", "Datos del Doctor: "))
+        self.lbl_imagen.setText(_translate("MainWindow", "Sobre la radiografía: "))
+        self.lbl_paciente.setText(_translate("MainWindow", "Datos del Paciente: "))
+        self.lbl_edad.setText(_translate("MainWindow", "Edad:"))
+        self.lbl_sexo.setText(_translate("MainWindow", "Sexo:"))
+        self.select_sexo.setItemText(0, _translate("MainWindow", ""))
+        self.select_sexo.setItemText(1, _translate("MainWindow", "Femenino"))
+        self.select_sexo.setItemText(2, _translate("MainWindow", "Masculino"))
         self.btn_calcular.setText(_translate("MainWindow", "Calcular"))
         self.btn_reajustar.setText(_translate("MainWindow", "Colocar Distancia"))
-        #self.imagen.setText(_translate("MainWindow", "Imagen"))
-        # self.btn_mas.setText(_translate("MainWindow", "+"))
-        # self.btn_menos.setText(_translate("MainWindow", "-"))
-        # self.lbl_zoom.setText(_translate("MainWindow", "<html><head/><body><p align=\"center\">Zoom</p></body></html>"))
         self.lbl_titulo.setText(_translate("MainWindow", "¡Bienvenido a OrCeph!"))
         self.lbl_indicacion.setText(_translate("MainWindow", "Ingrese la radiografía que desea analizar:"))
         self.lbl_radiografia.setText(_translate("MainWindow", "Ingrese la radiografía:       "))
@@ -299,26 +419,10 @@ class Ui_MainWindow(object):
         self.btn_descargarInforme.setText(_translate("MainWindow", "Descargar Informe"))
         self.btn_descargarTrazado.setText(_translate("MainWindow", "Descargar Trazado"))
         self.btn_verPlanos.setText(_translate("MainWindow", "Visualizar Planos"))
-        self.btn_verAngulos.setText(_translate("MainWindow", "Visualizar Angulos"))
+        #self.btn_verAngulos.setText(_translate("MainWindow", "Visualizar Angulos"))
         self.btn_verPuntos.setText(_translate("MainWindow", "Recolocar Puntos"))
+        self.btn_verResultados.setText(_translate("MainWindow", "Visualizar Informe"))
 
-
-# class Portada(QWidget):
-#     def __init__(self, MainWindow, stack):
-#         super().__init__()
-#         self.stack = stack
-#         layout = QVBoxLayout()
-#         layout.setAlignment(Qt.AlignHCenter)
-#         label = QLabel("Bienvenido a OrCeph")
-#         layout.addWidget(label)
-#         spacer_top = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-#         layout.addItem(spacer_top)
-#         button = QPushButton("Iniciar")
-#         button.clicked.connect(self.next_screen)
-#         layout.addWidget(button)
-#         spacer_bottom = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
-#         layout.addItem(spacer_bottom)
-#         self.setLayout(layout)
 
 class Portada(QtWidgets.QWidget):
     def __init__(self, stack, width, height, MainWindow, parent=None):
@@ -337,6 +441,7 @@ class PhotoLabel(QLabel):
     def __init__(self,*args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setAlignment(Qt.AlignCenter)
+        self.main_window = None
         self.posicion = [0,0]
         self.posicion_anterior = [0,0]
         self.pixmap = None
@@ -355,15 +460,8 @@ class PhotoLabel(QLabel):
         self.pixmap = QPixmap(*args, **kwargs)
         self.pixmap_temp = QPixmap(*args, **kwargs)
         self.pixmapPlanos = None
-        self.pixmapAngulos = None
+        #self.pixmapAngulos = None
         self.main_window = None
-        #qp = QPainter(pixmap)
-        #pen = QPen(Qt.white, 5)
-        #qp.setPen(pen)
-        # self.point = QPoint(200+10,200-5)
-        # self.qp.drawPoint(0,0);
-        # self.qp.drawText(self.point, "S")
-        # self.qp.end()
         super().setPixmap(self.pixmap)
         super().setScaledContents(True)
         self.setStyleSheet('''
@@ -376,10 +474,6 @@ class PhotoLabel(QLabel):
             self.punto = texto
             self.numbutton = num_button
             self.main_window = main_window
-            # qp.drawPoint(self.posicion[0],self.posicion[1])
-            # qp.drawText(self.posicion[0]+10,self.posicion[1]-5, texto)
-            # super().setPixmap(self.pixmap)
-            # print("Fin del punto")
 
     def setDistancia(self, main_window):
         if(self.pixmap != None):
@@ -424,25 +518,27 @@ class PhotoLabel(QLabel):
         self.qp.drawLine(puntoA[0], puntoA[1], puntoB[0], puntoB[1])
         self.qp.end()
 
-    def drawAngulo(self,puntoA, puntoB, puntoC):
-        if(self.pixmapAngulos == None):
-            self.pixmapAngulos = QPixmap(self.pixmap)
-        self.qp = QPainter(self.pixmapAngulos)
-        self.pen = QPen(Qt.blue, 5)
-        self.qp.setPen(self.pen)
-        self.qp.drawLine(puntoA[0], puntoA[1], puntoB[0], puntoB[1])
-        self.qp.drawLine(puntoB[0], puntoB[1], puntoC[0], puntoC[1])
-        self.qp.end()
+    #def drawAngulo(self,puntoA, puntoB, puntoC):
+    #    if(self.pixmapAngulos == None):
+    #        self.pixmapAngulos = QPixmap(self.pixmap)
+    #    self.qp = QPainter(self.pixmapAngulos)
+    #    self.pen = QPen(Qt.blue, 5)
+    #    self.qp.setPen(self.pen)
+    #    self.qp.drawLine(puntoA[0], puntoA[1], puntoB[0], puntoB[1])
+    #    self.qp.drawLine(puntoB[0], puntoB[1], puntoC[0], puntoC[1])
+    #    self.qp.end()
         
 
     def showPuntos(self):
         super().setPixmap(self.pixmap)
 
     def showPlanos(self):
+        self.main_window.widget_13.hide()
+        self.main_window.widget_5.show()
         super().setPixmap(self.pixmapPlanos)
 
-    def showAngulos(self):
-        super().setPixmap(self.pixmapAngulos)
+    #def showAngulos(self):
+    #    super().setPixmap(self.pixmapAngulos)
 
 
     def mousePressEvent(self, event):
@@ -510,17 +606,5 @@ class PhotoLabel(QLabel):
                     self.main_window.select_unidad.setEnabled(True)
                     self.main_window.btn_aceptarDistancia.setEnabled(True)
                     self.main_window.btn_reajustar.setText("Reajustar Distancia")
-                    # self.distancia = False
-                #####
-                # self.qp = QPainter(self.pixmap)
-                # rect = QRect(self.posicion[0]-10, self.posicion[1]-10, 20, 20)
-                # # save the background color
-                # bg_color = QColor(self.pixmap_temp.toImage().pixel(self.posicion[0], self.posicion[1]))
-                # # erase the rectangle
-                # self.qp.eraseRect(rect)
-                # # draw a rectangle over the erased area with the background color
-                # self.qp.fillRect(rect, bg_color)
-                # self.qp.end()
-                # super().setPixmap(self.pixmap)
 
 
