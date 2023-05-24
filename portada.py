@@ -9,7 +9,7 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import os
 
 class Ui_Form(object):    
     def setupUi(self, Form, stack, width, height):
@@ -34,6 +34,9 @@ class Ui_Form(object):
         self.label_3.setGeometry(QtCore.QRect(100, 120, 700, 800))
         self.label_3.setText("")
         self.label_3.setPixmap(QtGui.QPixmap(":/Politecnico/Logo Steiner.jpg"))
+        logo = QtGui.QPixmap(":/Politecnico/Logo Steiner.jpg")
+        current_directory = os.path.dirname(os.path.abspath(__file__))
+        logo.save(f"{current_directory}/Logo Steiner.jpg")
         self.label_3.setScaledContents(True)
         self.label_3.setObjectName("label_3")
         self.pushButton = QtWidgets.QPushButton(Form)

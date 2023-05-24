@@ -530,6 +530,8 @@ class PhotoLabel(QLabel):
         
 
     def showPuntos(self):
+        self.main_window.widget_13.hide()
+        self.main_window.widget_5.show()
         super().setPixmap(self.pixmap)
 
     def showPlanos(self):
