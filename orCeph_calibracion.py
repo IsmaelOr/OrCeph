@@ -14,7 +14,6 @@ from moduloSteiner import calcularPlanos2, calcularAngulos2, calcularFacial
 from datetime import datetime
 import os
 import Poli_rc
-from PIL import Image
 
 class Aplicacion(QMainWindow):
     def __init__(self, width, height):

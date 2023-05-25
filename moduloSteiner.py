@@ -325,7 +325,7 @@ def calcularPlanos2(puntos, planos, main_window):
             main_window.photo.drawPlano(puntos['IIS'], puntos['AIS'])
 
     if(puntos['Po'] != None):
-        if('Or' in puntos):
+        if(puntos['Or'] != None):
             planos['Po-Or'] = calcularDistancia(puntos['Po'], puntos['Or'])
             main_window.photo.drawPlano(puntos['Po'], puntos['Or'])
     
