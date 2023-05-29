@@ -10,7 +10,7 @@ from PyQt5.QtGui import QScreen
 from orCeph_interfaz import Ui_MainWindow
 from functools import partial
 from fpdf import FPDF
-from moduloSteiner import calcularPlanos2, calcularAngulos2, calcularFacial
+from moduloSteiner import calcularPlanos, calcularAngulos, calcularFacial
 from datetime import datetime
 import os
 import Poli_rc
@@ -18,14 +18,12 @@ import Poli_rc
 class Aplicacion(QMainWindow):
     def __init__(self, width, height):
         super().__init__()
-        
         self.inicializar_gui(width, height)
+        self.setAcceptDrops(True)
 
     def inicializar_gui(self, width, height):
         self.pdf = None
-        print(width, height)
         self.setWindowTitle("Portada")
-        
         self.ui = Ui_MainWindow()
         self.ui.setupUi(self, width, height)
         
@@ -35,6 +33,9 @@ class Aplicacion(QMainWindow):
 
         for i, arg in enumerate(self.puntosSteinerList):
             self.ui.buttonList[i].clicked.connect(partial(self.drawPoint, arg, i))
+
+        for i, arg in enumerate(self.puntosSteinerList):
+            self.ui.quitPointList[i].clicked.connect(partial(self.quitPoint, arg, i))
         
         
         self.ui.btn_reajustar.clicked.connect(self.colocarDistancia)
@@ -51,8 +52,6 @@ class Aplicacion(QMainWindow):
 
     def showResultados(self):
         current_directory = os.path.dirname(os.path.abspath(__file__))
-        #print(os.path.abspath(os.getcwd()))
-        #print(current_directory)
         self.ui.web_view.load(QUrl.fromLocalFile(f"{current_directory}/tempInforme.pdf"))
         self.ui.widget_5.hide()
         self.ui.widget_13.show()
@@ -81,7 +80,6 @@ class Aplicacion(QMainWindow):
             return
         else:
             self.ui.pixelUnidad = abs(1 * self.ui.distanciaInput / (self.ui.puntosDistancia['PuntoB'][1]-self.ui.puntosDistancia['PuntoA'][1]))
-            # print(self.pixelInUnidad)  Cuantos mm equivale 1px
             for i, arg in enumerate(self.puntosSteinerList):
                 self.ui.buttonList[i].setEnabled(True)
                 self.ui.btn_calcular.setEnabled(True)
@@ -94,21 +92,26 @@ class Aplicacion(QMainWindow):
         self.ui.lbl_indicacion.setText("Coloque dos puntos en la radiografía para trazar una linea:")
     
     def calcularSteiner(self):
-        # print(f'Puntos Steiner: \n {self.ui.puntosSteiner}')
-        self.ui.planos = calcularPlanos2(self.ui.puntosSteiner, self.ui.planos, self.ui)
-        self.ui.angulos = calcularAngulos2(self.ui.puntosSteiner, self.ui.planos, self.ui.angulos, self.ui)
+        self.ui.lbl_indicacion.setText("Descargue los resultados y el trazado de la radiografía.")
+        if(self.ui.btn_calcular.text() == "Recalcular"):
+            self.ui.planos = {}
+            self.ui.angulos = {}
+            self.ui.photo.pixmapPlanos = None
+        self.ui.btn_calcular.setText("Recalcular")
+        self.ui.planos = calcularPlanos(self.ui.puntosSteiner, self.ui.planos, self.ui)
+        self.ui.angulos = calcularAngulos(self.ui.puntosSteiner, self.ui.planos, self.ui.angulos, self.ui)
         for plano,valor in self.ui.planos.items():
            self.ui.planos[plano] = valor * self.ui.pixelUnidad
-        print(f'Planos: \n ${self.ui.planos}')
-        print(f'Angulos: \n ${self.ui.angulos}')
         if(len(self.ui.planos) != 0):
             current_directory = os.path.dirname(os.path.abspath(__file__))
             self.ui.photo.pixmapPlanos.save(f"{current_directory}/tempTrazado.png", "PNG")
             self.ui.btn_verPlanos.setEnabled(True)
             self.ui.btn_descargarTrazado.setEnabled(True)
+        else:
+            self.ui.btn_verPlanos.setEnabled(False)
+            self.ui.btn_descargarTrazado.setEnabled(False)
         self.ui.btn_verPuntos.setEnabled(True)
         self.ui.btn_verResultados.setEnabled(True)
-        #informe_pdf = self.crearInforme(self.ui.puntosSteiner, self.ui.planos, self.ui.angulos)
         self.ui.btn_descargarInforme.setEnabled(True)
         self.pdf = self.crearInforme(self.ui.puntosSteiner, self.ui.planos, self.ui.angulos)
 
@@ -176,7 +179,6 @@ class Aplicacion(QMainWindow):
             ['', '', '', '100%', '43%', '57%', '1/3', '2/3', '3/3', '3mm±1']
         ]
         
-        print(f'Creando PDF')
         pdf = PDF(orientation='P', unit='mm', format='A4')
         # PORTADA
         pdf.add_page()
@@ -242,7 +244,6 @@ class Aplicacion(QMainWindow):
                     pdf.cell(w=20, h=altura, txt=f"{valor}", border=1, align= 'C', fill = 0)
             pdf.set_fill_color(173, 216, 230)
             if(valor != '-' and valor < analisis_esqueletico[i][1]-analisis_esqueletico[i][2]):
-                print(f"{valor} - {analisis_esqueletico[i][1]-analisis_esqueletico[i][2]}")
                 pdf.cell(w=38, h=altura, txt=f"{analisis_esqueletico[i][3]}", border=1, align= 'C', fill = 1)
             else:
                 pdf.cell(w=38, h=altura, txt=f"{analisis_esqueletico[i][3]}", border=1, align= 'C', fill = 0)
@@ -251,7 +252,6 @@ class Aplicacion(QMainWindow):
             else:
                 pdf.cell(w=23, h=altura, txt=f"{analisis_esqueletico[i][4]}", border=1, align= 'C', fill = 0)
             if(valor != '-' and valor > analisis_esqueletico[i][1]+analisis_esqueletico[i][2]):
-                print(f"{valor} + {analisis_esqueletico[i][1]+analisis_esqueletico[i][2]}")
                 pdf.multi_cell(w=39, h=altura, txt=f"{analisis_esqueletico[i][5]}", border=1, align= 'C', fill = 1)
             else:
                 pdf.multi_cell(w=39, h=altura, txt=f"{analisis_esqueletico[i][5]}", border=1, align= 'C', fill = 0)
@@ -453,7 +453,7 @@ class Aplicacion(QMainWindow):
 
         pdf.set_x(x+90)
         if('Sn-St' in planos_facial and 'St-Me' in planos_facial and 'Sn-Me' in planos_facial):
-            if((int(planos_facial['Sn-St'])  == int(planos_facial['Sn-Me'] / 3)) and (int(planos_facial['St-Me'])  == (int(planos_facial['Sn-Me'] / 3))*2)):
+            if((int(planos_facial['Sn-St'])  == int(planos_facial['Sn-Me'] / 3)) or (int(planos_facial['St-Me'])  == (int(planos_facial['Sn-Me'] / 3))*2)):
                 pdf.cell(w=33, h=15, txt=f"Los tercios coinciden", border=1, align= 'C', fill = 1)
                 pdf.multi_cell(w=33, h=5, txt=f"El tercio superior esta aumentado y el inferior disminuido", border=1, align= 'C', fill = 0)
                 pdf.set_xy(x+156, pdf.get_y()-15)
@@ -595,44 +595,105 @@ class Aplicacion(QMainWindow):
             pdf.add_page()
             pdf.set_font('times', 'B', 12)
             pdf.multi_cell(w=0,h=16, txt="Trazado de planos cefalométricos", border=0, align= 'C', fill = 0)
-            pdf.image(f"{current_directory}/tempTrazado.png", x=10, y=25, w=190, h=231)
+            pdf.image(f"{current_directory}/tempTrazado.png", x=10, y=25, w=190, h=int(self.new_height * (190 / self.new_width)))
         pdf.output(f"{current_directory}/tempInforme.pdf")
         return pdf
 
 
     def drawPoint(self,label, num_button):
         self.ui.photo.setPoint(label, num_button,self.ui)
-        
+        self.ui.lbl_indicacion.setText("Al terminar de colocar los puntos que necesite presione el botón 'Calcular':")
+    
+    def quitPoint(self, label, num_button):
+        self.ui.photo.removePoint(label, num_button, self.ui)
     
     def open_image(self, filename=None):
         if not filename:
             filename, _ = QFileDialog.getOpenFileName(self, 'Select Photo', QDir.currentPath(), "Images (*.png *.jpg *.jpeg)")
             if not filename:
                 return
-            info = QFileInfo(filename)
-            image_info = QImageReader(filename)
-            medidas = image_info.size()
-            width = medidas.width()
-            height = medidas.height()
-            print(width, height);
-            if(info.size() > 5242880):
-                alert = QMessageBox()
-                alert.setIcon(QMessageBox.Information)
-                alert.setText("Your image is greater than 5MB")
-                alert.setWindowTitle("Alert")
-                alert.setStandardButtons(QMessageBox.Ok)
-                alert.exec_()
-                return
+        info = QFileInfo(filename)
+        if(not(info.suffix() == 'jpg' or info.suffix() == 'png' or info.suffix() == 'jpeg')):
+            alert = QMessageBox()
+            alert.setIcon(QMessageBox.Information)
+            alert.setText("Ingrese un archivo con extensión PNG, JPG, JPEG")
+            alert.setWindowTitle("Alert")
+            alert.setStandardButtons(QMessageBox.Ok)
+            alert.exec_()
+            return
+        image_info = QImageReader(filename)
+        medidas = image_info.size()
+        width = medidas.width()
+        height = medidas.height()
+        if(info.size() > 5242880):
+            alert = QMessageBox()
+            alert.setIcon(QMessageBox.Information)
+            alert.setText("Ingrese una imagen menor de 5MB")
+            alert.setWindowTitle("Alert")
+            alert.setStandardButtons(QMessageBox.Ok)
+            alert.exec_()
+            return
         pixmap = QPixmap(filename)
-        scaled_pixmap = pixmap.scaled(1590, int(height * (1590 / width)))
-        self.ui.photo.setPixmap(scaled_pixmap)
+        self.new_width = 1590
+        self.new_height = int(height * (1590 / width))
+        scaled_pixmap = pixmap.scaled(self.new_width, self.new_height)
+        self.ui.photo.setPixmap(scaled_pixmap, )
         self.ui.scroll2.setStyleSheet("")
         self.ui.scroll2.setStyleSheet("border: 1px solid black;")
         self.ui.photo.setFixedSize(1590, int(height * (1590 / width)))
+        self.reset()
+
+    def reset(self):
         self.ui.btn_reajustar.setEnabled(True)
+        for i in range(len(self.ui.buttonList)):
+            self.ui.buttonList[i].setText("Colocar Punto")
+            self.ui.buttonList[i].setEnabled(False)
+            self.ui.quitPointList[i].setEnabled(False)
+        for k,v in self.ui.puntosSteiner.items():
+            self.ui.puntosSteiner[k] = None
+        self.ui.photo.punto = None
+        self.ui.puntosDistancia = {
+            'PuntoA': None,
+            'PuntoB': None
+        }
+        self.ui.planos = {}
+        self.ui.angulos = {}
+        self.ui.btn_calcular.setEnabled(False)
+        self.ui.btn_verPlanos.setEnabled(False)
+        self.ui.btn_verResultados.setEnabled(False)
+        self.ui.btn_verPuntos.setEnabled(False)
+        self.ui.btn_aceptarDistancia.setEnabled(False)
+        self.ui.btn_descargarInforme.setEnabled(False)
+        self.ui.btn_descargarTrazado.setEnabled(False)
+        self.ui.input_medida.setEnabled(False)
+        self.ui.input_medida.setValue(0)
+        self.ui.select_unidad.setEnabled(False)
+        self.ui.btn_calcular.setText("Calcular")
         self.ui.btn_reajustar.setText("Colocar Distancia")
         self.ui.lbl_indicacion.setText("Presione el botón 'Colocar distancia'.")
+        self.ui.widget_5.show()
+        self.ui.widget_13.hide()
+    
+    def dragEnterEvent(self, event):
+        if event.mimeData().hasImage:
+            event.accept()
+        else:
+            event.ignore()
 
+    def dragMoveEvent(self, event):
+        if event.mimeData().hasImage:
+            event.accept()
+        else:
+            event.ignore()
+
+    def dropEvent(self, event):
+        if event.mimeData().hasImage:
+            event.setDropAction(Qt.CopyAction)
+            filename = event.mimeData().urls()[0].toLocalFile()
+            event.accept()
+            self.open_image(filename)
+        else:
+            event.ignore()
 
 class PDF(FPDF):
     def footer(self):
@@ -654,10 +715,7 @@ def main():
     app = QApplication(sys.argv)
     desktop = app.desktop()
     size_screen = desktop.screenGeometry()
-    print(size_screen.width(), size_screen.height())
-    
     ventana = Aplicacion(size_screen.width(), size_screen.height())
-    print(os.path.dirname(os.path.abspath(__file__)))
     atexit.register(delete_file_on_exit)
     sys.exit(app.exec_())
 

@@ -16,6 +16,8 @@ from PyQt5.QtGui import *
 from portada import Ui_Form
 from PyQt5.QtWebEngineWidgets import QWebEngineView, QWebEngineSettings
 from PyQt5.QtCore import QUrl
+import Poli_rc
+
 
 
 class Ui_MainWindow(object):
@@ -77,7 +79,8 @@ class Ui_MainWindow(object):
 
         self.distanciaInput = None
         self.unidadInput = None
-
+        
+        MainWindow.setWindowIcon(QIcon(":/Politecnico/Logo Steiner.jpg"))
         MainWindow.setObjectName("MainWindow")
         MainWindow.resize(width, height - 70)
         MainWindow.move(0,0)
@@ -187,7 +190,7 @@ class Ui_MainWindow(object):
         self.lbl_sexo.setObjectName("lbl_sexo")
         self.horizontalLayout3.addWidget(self.lbl_sexo, 1)
         self.select_sexo = QtWidgets.QComboBox(self.widget_6)
-        self.select_sexo.setObjectName("select_unidad")
+        self.select_sexo.setObjectName("select_sexo")
         self.select_sexo.addItem("")
         self.select_sexo.addItem("")
         self.select_sexo.addItem("")
@@ -212,8 +215,8 @@ class Ui_MainWindow(object):
         self.select_unidad.setObjectName("select_unidad")
         self.select_unidad.setEnabled(False)
         self.select_unidad.addItem("")
-        self.select_unidad.addItem("")
-        self.select_unidad.addItem("")
+        # self.select_unidad.addItem("")
+        # self.select_unidad.addItem("")
         self.horizontalLayout.addWidget(self.select_unidad)
         self.btn_aceptarDistancia = QtWidgets.QPushButton(self.widget_2)
         self.btn_aceptarDistancia.setObjectName("btn_aceptarDistancia")
@@ -243,12 +246,19 @@ class Ui_MainWindow(object):
         self.groupBox = QGroupBox("Selecciona un punto:")
         self.labelList = []
         self.buttonList = []
+        self.quitPointList = []
         i = 0
         for k,v in self.puntosSteiner.items():
             self.labelList.append(QLabel(f"{k}:"))
             self.buttonList.append(QPushButton("Colocar Punto"))
             self.buttonList[i].setEnabled(False)
-            self.formLayout.addRow(self.labelList[i], self.buttonList[i])
+            self.quitPointList.append(QPushButton("×"))
+            self.quitPointList[i].setFixedSize(20,20)
+            horizontal_layout = QHBoxLayout()
+            horizontal_layout.addWidget(self.buttonList[i],3)
+            horizontal_layout.addWidget(self.quitPointList[i],1)
+            self.quitPointList[i].setEnabled(False)
+            self.formLayout.addRow(self.labelList[i], horizontal_layout)
             i = i + 1
 
         self.groupBox.setLayout(self.formLayout)
@@ -389,14 +399,13 @@ class Ui_MainWindow(object):
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
 
-
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "orCeph"))
         self.lbl_ditancia.setText(_translate("MainWindow", "Distancia entre los puntos:"))
         self.select_unidad.setItemText(0, _translate("MainWindow", "mm"))
-        self.select_unidad.setItemText(1, _translate("MainWindow", "cm"))
-        self.select_unidad.setItemText(2, _translate("MainWindow", "in"))
+        # self.select_unidad.setItemText(1, _translate("MainWindow", "cm"))
+        # self.select_unidad.setItemText(2, _translate("MainWindow", "in"))
         self.lbl_lista.setText(_translate("MainWindow", "Lista de Puntos de Steiner:"))
         self.lbl_nombreD.setText(_translate("MainWindow", "Nombre:"))
         self.lbl_nombreP.setText(_translate("MainWindow", "Nombre:"))
@@ -447,7 +456,7 @@ class PhotoLabel(QLabel):
         self.pixmap = None
         self.qp = None
         self.pen = None
-        self.punto = ""
+        self.punto = None
         self.distancia = False
         self.setText('\n\n Drop Image Here \n\n')
         self.setStyleSheet('''
@@ -455,7 +464,7 @@ class PhotoLabel(QLabel):
             border: 4px dashed #aaa;
         }''')
 
-
+    
     def setPixmap(self, *args, **kwargs):
         self.pixmap = QPixmap(*args, **kwargs)
         self.pixmap_temp = QPixmap(*args, **kwargs)
@@ -468,6 +477,28 @@ class PhotoLabel(QLabel):
         QLabel {
             border: none;
         }''')
+
+    def removePoint(self, punto, num_btn, main_window):
+        if(self.pixmap != None and self.pixmap_temp != None):
+            self.qp = QPainter(self.pixmap)
+            self.posicion_anterior[0] = self.main_window.puntosSteiner[punto][0]
+            self.posicion_anterior[1] = self.main_window.puntosSteiner[punto][1]
+            self.main_window.puntosSteiner[punto] = None
+            self.main_window.buttonList[num_btn].setText("Colocar Punto")
+            for i in range(self.posicion_anterior[0]-4, self.posicion_anterior[0]+5):
+                for j in range(self.posicion_anterior[1]-4, self.posicion_anterior[1]+5):
+                    bg_color = QColor(self.pixmap_temp.toImage().pixel(i, j))
+                    self.qp.setPen(QPen(bg_color, 1))
+                    self.qp.drawPoint(i,j)
+            for i in range (self.posicion_anterior[0]+4, self.posicion_anterior[0]+35):
+                for j in range(self.posicion_anterior[1]-14, self.posicion_anterior[1]-3):
+                    bg_color = QColor(self.pixmap_temp.toImage().pixel(i, j))
+                    self.qp.setPen(QPen(bg_color, 1))
+                    self.qp.drawPoint(i,j)
+            self.qp.end()
+            super().setPixmap(self.pixmap)
+            self.punto = None
+            self.main_window.quitPointList[num_btn].setEnabled(False)
 
     def setPoint(self,texto, num_button, main_window):
         if(self.pixmap != None):
@@ -496,7 +527,6 @@ class PhotoLabel(QLabel):
                 puntoXmayor = self.main_window.puntosDistancia['PuntoB'][0]
             for i in range(puntoXmenor-10, puntoXmayor+10):
                 for j in range(puntoYmenor-10, puntoYmayor+10):
-                    print(f'{i}, {j}')
                     bg_color = QColor(self.pixmap_temp.toImage().pixel(i, j))
                     self.qp.setPen(QPen(bg_color, 1))
                     self.qp.drawPoint(i,j) 
@@ -543,28 +573,25 @@ class PhotoLabel(QLabel):
     #    super().setPixmap(self.pixmapAngulos)
 
 
+
     def mousePressEvent(self, event):
         if(event.buttons() & Qt.LeftButton):
             self.posicion[0] = event.pos().x()
             self.posicion[1] = event.pos().y()
-            print(self.posicion)
             self.update()
 
-            if(self.distancia == False and self.punto != "" and self.main_window != None and self.main_window.puntosSteiner[self.punto] == None):
-                print("Punto seleccionado")
+            if(self.distancia == False and self.punto != "" and self.main_window != None and self.punto != None and self.main_window.puntosSteiner[self.punto] == None):
                 self.qp = QPainter(self.pixmap)
                 self.pen = QPen(QColor(57,255,20), 9)
                 self.qp.setPen(self.pen)
-                #print(self.posicion)
                 self.qp.drawPoint(self.posicion[0],self.posicion[1])
                 self.qp.drawText(self.posicion[0]+5,self.posicion[1]-5, self.punto)
                 self.main_window.buttonList[self.numbutton].setText(f"({self.posicion[0]},{self.posicion[1]})")
-                # self.posicion_anterior[0] = self.posicion[0]
-                # self.posicion_anterior[1] = self.posicion[1]
                 self.main_window.puntosSteiner[self.punto] = (self.posicion[0], self.posicion[1])
                 self.qp.end()
                 super().setPixmap(self.pixmap)
-            elif(self.distancia == False and self.main_window != None and self.main_window.puntosSteiner[self.punto] != None):
+                self.main_window.quitPointList[self.numbutton].setEnabled(True)
+            elif(self.distancia == False and self.main_window != None and self.punto != None and self.main_window.puntosSteiner[self.punto] != None):
                 self.qp = QPainter(self.pixmap)
                 self.posicion_anterior[0] = self.main_window.puntosSteiner[self.punto][0]
                 self.posicion_anterior[1] = self.main_window.puntosSteiner[self.punto][1]

@@ -109,102 +109,6 @@ def encontrarAngulo(punto1, punto2, punto3, punto4):
     distanciaCA = calcularDistancia((x,y), punto4)
     return calcularAngulo(distanciaAB,distanciaBC,distanciaCA)
 
-def calcularPlanos():
-    if('Gn' in puntos):
-        if('Go' in puntos):
-            planos['PM (Go-Gn)'] = calcularDistancia(puntos['Gn'], puntos['Go'])
-
-        if('Pt' in puntos):
-            planos['Pt-Gn'] = calcularDistancia(puntos['Pt'], puntos['Gn'])
-
-    if('N' in puntos):
-        if('S' in puntos):
-            planos['SN'] = calcularDistancia(puntos['S'], puntos['N'])
-
-        if('A' in puntos):
-            planos['NA'] = calcularDistancia(puntos['N'], puntos['A'])
-
-            if('IIS' in puntos):
-                m1, b1 = encontrarEcuacion(puntos['N'],puntos['A'])
-                m2, b2 = encontrarPerpendicular(m1,b1, puntos['IIS'])
-                x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
-                P = (x, y)
-                planos['IIS-NA'] = calcularDistancia(P, puntos['IIS'])
-
-        if('B' in puntos):
-            planos['NB'] = calcularDistancia(puntos['N'], puntos['B'])
-            if('III' in puntos):
-                m1, b1 = encontrarEcuacion(puntos['N'],puntos['B'])
-                m2, b2 = encontrarPerpendicular(m1,b1, puntos['III'])
-                x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
-                P = (x, y)
-                planos['III-NB'] = calcularDistancia(P, puntos['III'])
-
-            if('Pg' in puntos):
-                m1, b1 = encontrarEcuacion(puntos['N'],puntos['B'])
-                m2, b2 = encontrarPerpendicular(m1,b1, puntos['Pg'])
-                x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
-                P = (x, y)
-                planos['Pg-(NB)'] = calcularDistancia(P, puntos['Pg'])
-
-        if('D' in puntos):
-            planos['ND'] = calcularDistancia(puntos['N'], puntos['D'])
-
-        if('Ba' in puntos):
-            planos['N-Ba'] = calcularDistancia(puntos['N'], puntos['Ba'])
-
-        if('Gn' in puntos):
-            planos['N-Gn'] = calcularDistancia(puntos['N'], puntos['Gn'])
-        
-    if('S' in puntos):
-        if('N' in puntos):
-            m1, b1 = encontrarEcuacion(puntos['S'],puntos['N'])
-            if('Pg' in puntos):
-                m2, b2 = encontrarPerpendicular(m1,b1, puntos['Pg'])
-                x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
-                L = (x, y)
-                planos['Silla-L'] = calcularDistancia(L, puntos['S'])
-                
-            if('Co' in puntos):
-                m2, b2 = encontrarPerpendicular(m1,b1, puntos['Co'])
-                x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
-                E = (x, y)
-                planos['Silla-E'] = calcularDistancia(E, puntos['S'])
-    
-    if('III' in puntos):
-        if('AII' in puntos):
-            planos['III-AII'] = calcularDistancia(puntos['III'], puntos['AII'])
-            
-        if('OMI' in puntos):
-            planos['III-OMI'] = calcularDistancia(puntos['III'], puntos['OMI'])
-
-    if('IIS' in puntos):
-        if('AIS' in puntos):
-            planos['IIS-AIS'] = calcularDistancia(puntos['IIS'], puntos['AII'])
-
-    if('Po' in puntos):
-        if('Or' in puntos):
-            planos['Po-Or'] = calcularDistancia(puntos['Po'], puntos['Or'])
-    
-    if('Pg\'' in puntos):
-        if('Prn' in puntos):
-            planos['Linea S'] = calcularDistancia(puntos['Pg\''], puntos['Prn'])
-            if('LS' in puntos):
-                m1, b1 = encontrarEcuacion(puntos['Pg\''],puntos['Prn'])
-                m2, b2 = encontrarPerpendicular(m1,b1, puntos['LS'])
-                x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
-                P = (x, y)
-                planos['(Pg\'-Prn)-LS'] = calcularDistancia(P, puntos['LS'])
-
-            if('LS' in puntos):
-                m1, b1 = encontrarEcuacion(puntos['Pg\''],puntos['Prn'])
-                m2, b2 = encontrarPerpendicular(m1,b1, puntos['LI'])
-                x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
-                P = (x, y)
-                planos['(Pg\'-Prn)-LI'] = calcularDistancia(P, puntos['LI'])
-
-    print(planos)
-
 def calcularSagital(punto1, punto2):
     return math.sqrt(math.pow(punto1[0] - punto1[0],2) + math.pow(punto1[1] - punto2[1],2))
 
@@ -227,15 +131,16 @@ def calcularFacial(puntos, planos_facial):
             planos_facial['Sn-St'] = calcularSagital(puntos['Sn'], puntos['St'])
         if(puntos['Me'] != None):
             planos_facial['St-Me'] = calcularSagital(puntos['St'], puntos['Me'])
-    if(puntos['LI'] != None):
-        if(puntos['St']):
-            if(puntos['LS'] != None):
-                planos_facial['LS-St-LI'] = calcularSagital(puntos['LS'], puntos['St']) - calcularSagital(puntos['St'], puntos['LI'])          
+    if(puntos['St'] != None):
+        if(puntos['LI']):
+            planos_facial['LS-St-LI'] = (calcularSagital(puntos['LI'], puntos['St']) / 4) 
+        elif(puntos['LS'] != None):
+            planos_facial['LS-St-LI'] = (calcularSagital(puntos['St'], puntos['LS']) / 4)      
 
 
     return planos_facial
 
-def calcularPlanos2(puntos, planos, main_window):
+def calcularPlanos(puntos, planos, main_window):
     if(puntos['Gn'] != None):
         if(puntos['Go'] != None):
             planos['PM (Go-Gn)'] = calcularDistancia(puntos['Gn'], puntos['Go'])
@@ -320,7 +225,7 @@ def calcularPlanos2(puntos, planos, main_window):
             main_window.photo.drawPlano(puntos['III'], puntos['OMI'])
 
     if(puntos['IIS'] != None):
-        if('AIS' in puntos):
+        if(puntos['AIS'] != None):
             planos['IIS-AIS'] = calcularDistancia(puntos['IIS'], puntos['AIS'])
             main_window.photo.drawPlano(puntos['IIS'], puntos['AIS'])
 
@@ -348,97 +253,10 @@ def calcularPlanos2(puntos, planos, main_window):
                 P = (x, y)
                 planos['(Pg\'-Prn)-LI'] = calcularDistancia(P, puntos['LI'])
                 main_window.photo.drawPlano(P, puntos['LI'])
-
-    # print(planos)
     return planos;
 
 
-
-def calcularAngulos():
-    angulosContador = 0
-    if('SN' in planos):
-        if('NA' in planos):
-            distanciaSA = calcularDistancia(puntos['A'], puntos['S'])
-            # El punto de steiner N será el punto A de la función
-            angulos['SNA'] = calcularAngulo(planos['SN'], distanciaSA, planos['NA'])
-
-            angulosContador += 1
-        if('NB' in planos):
-            distanciaSB = calcularDistancia(puntos['B'], puntos['S'])
-            # El punto de steiner N será el punto A de la función
-            angulos['SNB'] = calcularAngulo(planos['SN'], distanciaSB, planos['NB'])
-            angulosContador += 1
-        if('ND' in planos):
-            distanciaSD = calcularDistancia(puntos['D'], puntos['S'])
-            # El punto de steiner N será el punto A de la función
-            angulos['SND'] = calcularAngulo(planos['SN'], distanciaSD, planos['ND'])
-            angulosContador += 1
-        if('III' in puntos and 'OMI' in puntos):
-            angulos['PO-SN'] = encontrarAngulo(puntos['S'], puntos['N'],puntos['OMI'], puntos['III'] )
-            angulosContador += 1
-        if('Go' in puntos and 'Gn' in puntos):
-            angulos['(Go-Gn)-(S-N)'] = encontrarAngulo(puntos['S'], puntos['N'],puntos['Go'], puntos['Gn'] )
-            angulosContador += 1
-
-    if('NA' in planos):
-        if('III-AII' in planos):
-            m1, b1 = encontrarEcuacion(puntos['N'], puntos['A'])
-            m2, b2 = encontrarEcuacion(puntos['III'], puntos['AII'])
-            x, y = encontrarPuntoInterseccion(m1, b1, m2, b2)
-            punto1 = (x, y)
-            punto2y = m1 * (x + .1) + b1
-            punto2 = (x + .1, punto2y)
-
-            distanciaInterseccionAII = calcularDistancia(punto1, puntos['AII'])
-            distanciaAIIpunto2 =  calcularDistancia(punto2, puntos['AII'])
-            distanciaInterseccionPunto2 = calcularDistancia(punto1, punto2)
-            angulos['(III-AII)-(N-A)'] = calcularAngulo(distanciaInterseccionAII, distanciaAIIpunto2, distanciaInterseccionPunto2)
-            angulosContador += 1
-            
-        if('NB' in planos):
-            distanciaAB = calcularDistancia(puntos['A'], puntos['B'])
-            # El punto de steiner N será el punto A de la función
-            angulos['ANB'] = calcularAngulo(planos['NA'], distanciaAB, planos['NB'])
-            angulosContador += 1
-
-    if('IIS-AIS' in planos):
-        if('NA' in planos):
-            angulos['(IIS-AIS)-(N-A)'] = encontrarAngulo(puntos['IIS'], puntos['AIS'], puntos['A'], puntos['N'])
-            angulosContador += 1
-        if('NB' in planos):
-            angulos['(IIS-AIS)-(N-B)'] = encontrarAngulo(puntos['IIS'], puntos['AIS'], puntos['B'], puntos['N'])
-            angulosContador += 1
-    
-    if('III-AII' in planos):
-        if('IIS-AIS' in planos):
-            angulos['(III-AII)- (IIS-AIS)'] = encontrarAngulo(puntos['III'], puntos['AII'], puntos['IIS'], puntos['AIS'])
-            angulosContador += 1
-        if('NB' in planos):
-            angulos['(III-AII)- (N-B)'] = encontrarAngulo(puntos['III'], puntos['AII'], puntos['N'], puntos['B'])
-            angulosContador += 1
-    if('PM (Go-Gn)' in planos):
-        if('ENP' in puntos and 'ENA' in puntos):
-            angulos['(ENA-ENP)-(Go-Gn)'] = encontrarAngulo(puntos['ENP'], puntos['ENA'], puntos['Go'], puntos['Gn'])
-            angulosContador += 1
-        if('Po-Or' in planos):
-            angulos['(Po-Or)-(Go-Gn)'] = encontrarAngulo(puntos['Po'], puntos['Or'], puntos['Go'], puntos['Gn'])
-            angulosContador += 1
-        if('A' in puntos and 'B' in puntos):
-            angulos['(A-B)-(Go-Gn)'] = encontrarAngulo(puntos['Gn'], puntos['Go'], puntos['B'], puntos['A'])
-            angulosContador += 1
-        
-    if('Ar' in puntos and 'Go' in puntos and 'Me' in puntos):
-        distanciaArGo = calcularDistancia(puntos['Go'], puntos['Ar'])
-        distanciaMeAr = calcularDistancia(puntos['Me'], puntos['Ar'])
-        distanciaGoMe = calcularDistancia(puntos['Go'], puntos['Me'])
-        angulos['(Ar-Go)-(Go-Me)'] = calcularAngulo(distanciaArGo, distanciaMeAr, distanciaGoMe)
-        angulosContador += 1
- 
-    print(angulos)
-    print(angulosContador)
-    print(len(angulos))
-
-def calcularAngulos2(puntos,planos,angulos, main_window):
+def calcularAngulos(puntos,planos,angulos, main_window):
     angulosContador = 0
     if('SN' in planos):
         if('NA' in planos):
@@ -520,7 +338,6 @@ def calcularAngulos2(puntos,planos,angulos, main_window):
         angulos['(Ar-Go)-(Go-Me)'] = calcularAngulo(distanciaArGo, distanciaMeAr, distanciaGoMe)
         angulosContador += 1
 
-    print(angulosContador)
     return angulos
 
 #Pruebas
